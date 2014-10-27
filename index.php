@@ -41,7 +41,7 @@ $action = isset($_GET['action'])? $_GET['action']: 'main';
                 <li class="<?php if($action=="main") echo "active";?>"><a href="index.php?action=main">Main</a></li>
                 <li class="<?php if($action=="sound") echo "active";?>"><a href="index.php?action=sound">Sound</a></li>
                 <li class="<?php if($action=="setting") echo "active";?>"><a href="index.php?action=setting">Setting</a></li>
-                <li class="<?php if($action=="dep") echo "active";?>"><a href="index.php?action=dep">Dep</a></li>
+                <li class="<?php if($action=="dep") echo "active";?>"><a href="index.php?action=dep">Department</a></li>
                 <li class="<?php if($action=="tools") echo "active";?>"><a href="index.php?action=tools">Tools</a></li>
             </ul>
 <!--            <ul class="nav navbar-nav navbar-right">-->

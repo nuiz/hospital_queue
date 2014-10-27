@@ -12,6 +12,19 @@
 }
 </style>
 <div>
+    Prefix 1 <select>
+        <option value="volvo">ขอเชิญคุณ</option>
+    </select>
+    Prefix 2 <select>
+        <option value="volvo">ที่ห้อง</option>
+    </select>
+    Prefix 3 <select>
+        <option value="volvo">ด้วยค่ะ</option>
+        <option value="saab">ด้วยครับ</option>
+    </select>
+</div>
+<hr>
+<div>
     <form class="form-inline scan-form" role="form">
         <div class="form-group">
             <input type="text" class="form-control" placeholder="Human ID">
