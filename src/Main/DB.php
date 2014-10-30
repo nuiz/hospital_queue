@@ -21,7 +21,7 @@ class DB {
             self::$queEM = \Doctrine\ORM\EntityManager::create(array(
                 'driver'   => 'pdo_mysql',
                 'user'     => 'root',
-                'password' => '',
+                'password' => '111111',
                 'dbname'   => 'que',
                 'charset'  => 'utf8'
             ), $config);
