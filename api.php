@@ -14,6 +14,6 @@ $ctlName = $_GET['ctl'];
 
 $fullCTL = '\Main\CTL\\'.$ctlName;
 $ctl = new $fullCTL();
-$ctl->init($_POST);
+$ctl->init(array_merge($_GET, $_POST, $_FILES));
 $res = $ctl->{$methodName}();
 echo json_encode($res);

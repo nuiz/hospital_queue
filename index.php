@@ -17,12 +17,15 @@ $action = isset($_GET['action'])? $_GET['action']: 'main';
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hospital Queue</title>
 
+    <link rel="stylesheet" href="css/main.css">
+
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="js/jquery.isloading.min.js"></script>
 </head>
 <body>
 <!-- Fixed navbar -->
