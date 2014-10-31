@@ -11,7 +11,7 @@ $items = $ctl->gets();
 ?>
 <div>
     <h3>Department setting</h3>
-    <div><button>Sync department</button></div>
+    <div><button id="sync-btn">Sync department</button></div>
 </div>
 <hr>
 <div>
@@ -44,3 +44,17 @@ $items = $ctl->gets();
         </tbody>
     </table>
 </div>
+<script type="text/javascript">
+$(function(e){
+    $('#sync-btn').click(function(e){
+        e.preventDefault();
+        if(window.confirm('Are you shure?')){
+            $.isLoading({ text: "Loading" });
+            $.post("api.php?ctl=SyncCTL&method=spclty", {}, function(data){
+//                $.isLoading("hide");
+                window.location.reload(true);
+            }, 'json');
+        }
+    });
+});
+</script>

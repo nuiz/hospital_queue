@@ -61,4 +61,8 @@ class SyncCTL extends BaseCTL {
         }
         return true;
     }
+
+    public function que(){
+
+    }
 }
