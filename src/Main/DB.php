@@ -8,7 +8,7 @@
 namespace Main;
 
 class DB {
-    private static $queEM = null;
+    private static $queEM = null, $hosEM;
 
     /**
      * @return \Doctrine\ORM\EntityManager
@@ -23,9 +23,36 @@ class DB {
                 'user'     => 'root',
                 'password' => '',
                 'dbname'   => 'que',
-                'charset'  => 'utf8'
+                'charset'  => 'utf8',
+                'driverOptions' => array(
+                    1002=>'SET NAMES utf8'
+                )
             ), $config);
         }
         return self::$queEM;
+    }
+
+    /**
+     * @return \Doctrine\ORM\EntityManager
+     */
+    public static function hosEM()
+    {
+        if(is_null(self::$hosEM)){
+            $paths = array('src/Main/Entity/Hos');
+            $config = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, true);
+            self::$hosEM = \Doctrine\ORM\EntityManager::create(array(
+                'driver'   => 'pdo_mysql',
+                'user'     => 'root',
+                'password' => '',
+                'dbname'   => 'hos',
+                'charset'  => 'utf8',
+                'driverOptions' => array(
+                    1002=>'SET NAMES utf8'
+                )
+            ), $config);
+
+            self::$hosEM->createQuery();
+        }
+        return self::$hosEM;
     }
 }

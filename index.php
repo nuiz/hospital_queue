@@ -6,6 +6,7 @@
  * Time: 9:49 PM
  */
 
+require_once 'bootstrap.php';
 $action = isset($_GET['action'])? $_GET['action']: 'main';
 ?>
 <!DOCTYPE html>
