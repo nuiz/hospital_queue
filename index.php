@@ -1,12 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Papangping
- * Date: 10/26/14
- * Time: 9:49 PM
- */
 
 require_once 'bootstrap.php';
+require_once 'src/Main/Helper/Checksum.php';
+
 $action = isset($_GET['action'])? $_GET['action']: 'main';
 ?>
 <!DOCTYPE html>

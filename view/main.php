@@ -12,6 +12,23 @@
 }
 </style>
 <div>
+    <?php
+
+        $option = new stdClass();
+        $option->name = "Hospital Queue"; // Application Name
+        $option->version = 2.0; // Application Version
+
+
+        $checksum = new Checksum($option);
+        $key = $checksum->generate();
+        //var_dump($key, $checksum->check($key));
+        echo $key;
+        echo "<br>";
+        echo $checksum->check($key);
+    ?>
+
+</div>
+<div>
     Prefix 1 <select>
         <option value="volvo">ขอเชิญคุณ</option>
     </select>
