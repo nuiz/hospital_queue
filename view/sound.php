@@ -20,7 +20,7 @@
                         <label>Name</label>
                         <input type="text" class="form-control" name="name" placeholder="Enter name">
                     </div>
-                    <input type="hidden" name="prefix" value="1">
+                    <input type="hidden" name="prefix" id="prefix-val" value="1">
                     <button type="submit" class="btn btn-default">Submit</button>
                 </form>
             </div>
@@ -49,7 +49,7 @@
     </div>
     <div class="col-md-4">
         <div>
-            <button class="add-sound pull-right">Add</button>
+            <button class="add-sound pull-right add-btn" prefix="2">Add</button>
             <h3>Prefix 2</h3>
         </div>
         <table class='table table-bordered'>
@@ -62,19 +62,13 @@
                 </th>
             </tr>
             </thead>
-            <tbody class="">
-            <tr>
-                <td>ที่ห้อง</td>
-                <td>
-                    <button>Delete</button>
-                </td>
-            </tr>
+            <tbody id="tbody-prefix2">
             </tbody>
         </table>
     </div>
     <div class="col-md-4">
         <div>
-            <button class="add-sound pull-right">Add</button>
+            <button class="add-sound pull-right add-btn" prefix="3">Add</button>
             <h3>Prefix 3</h3>
         </div>
         <table class='table table-bordered'>
@@ -87,13 +81,7 @@
                 </th>
             </tr>
             </thead>
-            <tbody class="">
-            <tr>
-                <td>ด้วยค่ะ</td>
-                <td>
-                    <button>Delete</button>
-                </td>
-            </tr>
+            <tbody id="tbody-prefix3">
             </tbody>
         </table>
     </div>
@@ -125,6 +113,8 @@ $(function(){
     };
 
     var tbodyPrefix1 = $('#tbody-prefix1');
+    var tbodyPrefix2 = $('#tbody-prefix2');
+    var tbodyPrefix3 = $('#tbody-prefix3');
 
     $.post("api.php?ctl=SoundCTL&method=getsAllPrefix", {}, function(data){
         $.isLoading( "hide" );
@@ -136,12 +126,21 @@ $(function(){
             row = createRow(item, 1);
             tbodyPrefix1.append(row);
         }
+        for(i in data.prefix2){
+            item = data.prefix2[i];
+            row = createRow(item, 2);
+            tbodyPrefix2.append(row);
+        }
+        for(i in data.prefix3){
+            item = data.prefix3[i];
+            row = createRow(item, 3);
+            tbodyPrefix3.append(row);
+        }
     }, 'json');
 
     $('.add-btn').click(function(e){
         e.preventDefault();
-        var tbody = tbodyPrefix1;
-        $('#addModal input[name="prefix"]').val("1");
+        $('#addModal input[name="prefix"]').val($(this).attr('prefix'));
         $('#addModal').modal();
     });
 

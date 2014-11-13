@@ -12,7 +12,7 @@ namespace Main\Entity\Que;
  * @MappedSuperclass
  * @HasLifecycleCallbacks
  */
-class BaseEntity {
+class BaseEntity implements \JsonSerializable {
     /**
      * @Id
      * @Column(type="integer")
@@ -112,6 +112,13 @@ class BaseEntity {
     */
     public function jsonSerialize()
     {
-        return $this->toArray();
+        $item = $this->toArray();
+        foreach($item as $key=> $value){
+            if($value instanceof \DateTime){
+                $item[$key] = $value->getTimestamp();
+            }
+        }
+
+        return $item;
     }
-} 
+}

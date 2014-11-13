@@ -13,7 +13,6 @@ namespace Main\Entity\Hos;
  * @Table(name="spclty")
  */
 class Spclty extends BaseEntity {
-
     /**
      * @Id
      * @Column(type="string", length=2, options={"fixed" = true})

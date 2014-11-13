@@ -27,9 +27,9 @@ class WsClient
     {
         // send actual data:
         fwrite($this->_Socket, "\x00" . $data . "\xff" ) or die('Error:' . $errno . ':' . $errstr);
-        $wsData = fread($this->_Socket, 2000);
-        $retData = trim($wsData,"\x00\xff");
-        return $retData;
+//        $wsData = fread($this->_Socket, 2000);
+//        $retData = trim($wsData,"\x00\xff");
+//        return $retData;
     }
 
     private function _connect($host, $port)
