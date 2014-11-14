@@ -21,7 +21,7 @@ class DB {
             self::$queEM = \Doctrine\ORM\EntityManager::create(array(
                 'driver'   => 'pdo_mysql',
                 'user'     => 'root',
-                'password' => '111111',
+                'password' => '',
                 'dbname'   => 'que',
                 'charset'  => 'utf8',
                 'driverOptions' => array(
@@ -40,9 +40,19 @@ class DB {
         if(is_null(self::$hosEM)){
             $paths = array('src/Main/Entity/Hos');
             $config = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration($paths, true);
+//            self::$hosEM = \Doctrine\ORM\EntityManager::create(array(
+//                'driver'   => 'pdo_mysql',
+//                'host'     => '192.168.100.250',
+//                'user'     => 'sa',
+//                'password' => 'sa',
+//                'dbname'   => 'ud12418',
+//                'charset'  => 'utf8',
+//                'driverOptions' => array(
+//                    1002=>'SET NAMES utf8'
+//                )
+//            ), $config);
             self::$hosEM = \Doctrine\ORM\EntityManager::create(array(
                 'driver'   => 'pdo_mysql',
-                'host'     => '192.168.2.245',
                 'user'     => 'root',
                 'password' => '',
                 'dbname'   => 'hos',

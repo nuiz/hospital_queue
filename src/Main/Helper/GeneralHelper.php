@@ -10,7 +10,7 @@ namespace Main\Helper;
 
 class GeneralHelper {
     public static function url_socket() {
-        return 'ws://'.gethostname().':8081';
+        return 'ws://'.$_SERVER['HTTP_HOST'].':8081';
     }
 
     public static function base_url(){

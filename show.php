@@ -227,8 +227,7 @@ $(function(){
         };
 
         conn.onerror = function(){
-            $('.show-queue-list tr').remove();
-            setTimeout(function(){ skConnect(); }, 3000);
+            setTimeout(function(){ conn.close(); }, 3000);
         };
 
         conn.onclose = function(){
