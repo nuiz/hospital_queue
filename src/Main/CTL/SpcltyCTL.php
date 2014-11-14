@@ -28,7 +28,8 @@ class SpcltyCTL extends BaseCTL {
         if(!is_null($item)){
             if(isset($this->param['background'])){
                 $name = $this->param['background']['name'];
-                $ext = array_pop(explode('.', $name));
+                $ext = explode('.', $name);
+                $ext = array_pop($ext);
 
                 $allow = array("jpg", "jpeg", "png");
                 if(!in_array($ext, $allow)){
