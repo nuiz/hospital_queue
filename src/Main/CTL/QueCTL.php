@@ -51,9 +51,33 @@ class QueCTL extends BaseCTL {
             );
             $wsClient->sendData(json_encode($json));
             unset($wsClient);
-            unset($patient);
         }
 
         return $item;
     }
-} 
+
+    public function hide(){
+        $queEM = DB::queEM();
+        /** @var \Main\Entity\Que\Que $item */
+        $item = $queEM->getRepository('Main\Entity\Que\Que')->findOneBy(array(
+            'id'=> $this->param['id']
+        ));
+
+        if(!is_null($item)){
+            $item->setIsHide((bool)$this->param['is_hide']);
+            $queEM->merge($item);
+            $queEM->flush();
+
+            $wsClient = new \Main\Socket\Client\WsClient("localhost", 8081);
+
+            $json = array(
+                'publish'=> array(
+                    'name'=> 'hide',
+                    'data'=> $item
+                )
+            );
+            $wsClient->sendData(json_encode($json));
+            unset($wsClient);
+        }
+    }
+}

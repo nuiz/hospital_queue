@@ -21,6 +21,7 @@ class CallCTL extends BaseCTL {
         $call->setPrefix1Path($this->param['prefix1_path']);
         $call->setPrefix2Path($this->param['prefix2_path']);
         $call->setPrefix3Path($this->param['prefix3_path']);
+        $call->setSpclty($this->param['spclty']);
 
         $queEm->persist($call);
         $queEm->flush();

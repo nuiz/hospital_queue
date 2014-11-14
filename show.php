@@ -6,6 +6,16 @@
  * Time: 10:18 น.
  */
 require_once 'bootstrap.php';
+
+$splctyList = isset($_GET['spclty'])? explode(",", $_GET['spclty']): false;
+
+$queEM = \Main\DB::queEM();
+
+$qb = $queEM->getRepository('Main\Entity\Que\Spclty')->createQueryBuilder('a');
+$q = $qb->getQuery();
+
+/** @var \Main\Entity\Que\Spclty[] $spcltys */
+$spcltys = $q->getResult();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,6 +76,16 @@ require_once 'bootstrap.php';
 </script>
 <script type="text/javascript">
 $(function(){
+    var spcltyList = <?php echo json_encode($splctyList);?>;
+    function isSpcltyAllow(spclty){
+        if(!spcltyList)
+            return true;
+        if(jQuery.inArray( spclty, spcltyList ) != -1)
+            return true;
+
+        return false;
+    }
+
     function date() {
         var now = new Date(),
         now = now.getHours()+':'+now.getMinutes()+':'+now.getSeconds();
@@ -113,6 +133,12 @@ $(function(){
                     alert('error');
                 }
             }, 100);
+        },
+        startCall: function(){
+            if(callStack.calling){
+                return;
+            }
+            callStack.call();
         }
     };
 
@@ -132,6 +158,13 @@ $(function(){
 
         $(el).attr("vn", item.vn);
         $(el).attr("id", item.id);
+
+        if(item.is_hide==true){
+            $(el).hide();
+        }
+        else {
+            $(el).show();
+        }
 
         return el;
     }
@@ -153,6 +186,7 @@ $(function(){
                 var action = json.action;
                 if(action.name == 'QueCTL/gets'){
                     for(i in action.data){
+                        if(!isSpcltyAllow(action.data[i].spclty)) continue;
                         $('.show-queue-list').append(createRow(action.data[i]));
                     }
                 }
@@ -163,24 +197,48 @@ $(function(){
                 var data = json.publish.data;
 
                 if(pubName=="add"){
+                    if(!isSpcltyAllow(data.spclty)) return;
                     $('.show-queue-list').append(createRow(data));
                 }
                 else if(pubName=="skip"){
+                    if(!isSpcltyAllow(data.spclty)) return;
                     $('.queTr[id="'+data.id+'"]').remove();
                 }
                 else if(pubName=="call"){
+                    if(!isSpcltyAllow(data.spclty)) return;
                     callStack.push(data);
-                    callStack.call();
+                    callStack.startCall();
+                }
+                else if(pubName=="hide"){
+                    if(!isSpcltyAllow(data.spclty)) return;
+                    var tr = $('.queTr[id="'+data.id+'"]');
+                    if(data.is_hide==true){
+                        tr.hide();
+                    }
+                    else {
+                        tr.show();
+                    }
+                }
+                else if(pubName=="clear"){
+//                    $('.show-queue-list tr').remove();
+                    conn.close();
                 }
             }
         };
 
         conn.onerror = function(){
+            $('.show-queue-list tr').remove();
+            setTimeout(function(){ skConnect(); }, 3000);
+        };
+
+        conn.onclose = function(){
+            $('.show-queue-list tr').remove();
             setTimeout(function(){ skConnect(); }, 3000);
         };
 
         conn.onopen = function(){
-            conn.send(JSON.stringify({ action: {name: 'QueCTL/gets'}, subscribe: ["add", "skip", "call"] }));
+            $('.show-queue-list tr').remove();
+            conn.send(JSON.stringify({ action: {name: 'QueCTL/gets'}, subscribe: ["add", "skip", "call", "hide", "clear"] }));
         }
     };
 

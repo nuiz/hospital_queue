@@ -4,6 +4,15 @@ $queEM = \Main\DB::queEM();
 
 /** @var Main\Entity\Que\CallQue $call */
 $call = $queEM->getRepository('Main\Entity\Que\CallQue')->find($_GET['id']);
+/** @var Main\Entity\Que\Setting $setting */
+$setting = $queEM->getRepository('Main\Entity\Que\Setting')->findOneBy(array());
+/** @var Main\Entity\Que\Spclty $spclty */
+$spclty = $queEM->getRepository('Main\Entity\Que\Spclty')->findOneBy(array('spclty'=> $call->getSpclty()));
+
+$bgUrl = $spclty->getBackgroundPath();
+if(is_null($bgUrl)){
+    $bgUrl = $setting->getBackgroundPath();
+}
 
 // name sound
 $firstname_path = 'sound/google/'.base64_encode($call->getFname()).'.mp3';
@@ -84,9 +93,42 @@ $lname_url = "http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".
         box-shadow: 0 0 10px 1px #333;
         margin-bottom: 16px;
     }
-</style>
-<div class='row-fluid' >
+    body, html {
+        width: 100%;
+        height: 100%;
+    }
 
+    body {
+        background: url("<?php echo $bgUrl;?>");
+    }
+</style>
+<div class='row' >
+    <div class='col-md-6'>
+        <div class="box-content box-double-padding text-center">
+            <div style="padding-top: 50px;">
+                <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 90px;line-height: 80px;padding-bottom: 46px;"><i class="icon-volume-up"></i> ขอเชิญคุณ</h1>
+                <div style="display: inline-block;vertical-align: top;margin-right: 200px;">
+                    <!--                    <img src="--><?php //echo $pImgPath;?><!--" height="350" class="boxshadow" style="height: 350px;">-->
+                    <img data-src="holder.js/140x140" class="img-thumbnail" alt="140x140" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAiIGhlaWdodD0iMTQwIj48cmVjdCB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjcwIiB5PSI3MCIgc3R5bGU9ImZpbGw6I2FhYTtmb250LXdlaWdodDpib2xkO2ZvbnQtc2l6ZToxMnB4O2ZvbnQtZmFtaWx5OkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmO2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjE0MHgxNDA8L3RleHQ+PC9zdmc+" style="width: 140px; height: 140px;">
+
+                    <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 90px; line-height: 80px;"><?php echo $call->getFName()." ".$call->getLname();?></h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class='col-md-6'>
+        <div class="box-content box-double-padding text-center">
+            <div style="padding-top: 50px;">
+                <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 90px;line-height: 80px;padding-bottom: 46px;"><i class="icon-volume-up"></i> ขอเชิญคุณ</h1>
+                <div style="display: inline-block;vertical-align: top;margin-right: 200px;">
+                    <!--                    <img src="--><?php //echo $pImgPath;?><!--" height="350" class="boxshadow" style="height: 350px;">-->
+                    <img data-src="holder.js/140x140" class="img-thumbnail" alt="140x140" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAiIGhlaWdodD0iMTQwIj48cmVjdCB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjcwIiB5PSI3MCIgc3R5bGU9ImZpbGw6I2FhYTtmb250LXdlaWdodDpib2xkO2ZvbnQtc2l6ZToxMnB4O2ZvbnQtZmFtaWx5OkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmO2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjE0MHgxNDA8L3RleHQ+PC9zdmc+" style="width: 140px; height: 140px;">
+
+                    <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 90px; line-height: 80px;"><?php echo $call->getFName()." ".$call->getLname();?></h1>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -137,6 +179,7 @@ $lname_url = "http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".
             this.pause();
             prefix3.play();
         }, false);
+
         prefix2.addEventListener('error', function(){
             this.currentTime = 0;
             this.pause();

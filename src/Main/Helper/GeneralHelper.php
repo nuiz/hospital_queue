@@ -14,7 +14,7 @@ class GeneralHelper {
     }
 
     public static function base_url(){
-        return 'http://localhost/hospital_queue';
+        return 'http://localhost/hospital';
     }
 
     public static function curl_post($url, $data=null)
@@ -25,7 +25,7 @@ class GeneralHelper {
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS,$data);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         $server_output = curl_exec ($ch);

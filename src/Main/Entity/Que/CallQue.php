@@ -21,6 +21,9 @@ class CallQue extends BaseEntity {
     protected $lname;
 
     /** @Column(type="string") */
+    protected $spclty;
+
+    /** @Column(type="string") */
     protected $prefix1_path;
 
     /** @Column(type="string") */
@@ -123,6 +126,22 @@ class CallQue extends BaseEntity {
     public function getPrefix3Path()
     {
         return $this->prefix3_path;
+    }
+
+    /**
+     * @param mixed $spclty
+     */
+    public function setSpclty($spclty)
+    {
+        $this->spclty = $spclty;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSpclty()
+    {
+        return $this->spclty;
     }
 
 

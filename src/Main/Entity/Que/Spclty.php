@@ -31,6 +31,9 @@ class Spclty extends BaseEntity {
     /** @Column(type="string", nullable=true, length=10) */
     protected $shortname;
 
+    /** @Column(type="string", nullable=true) */
+    protected $background_path;
+
     /**
      * @param mixed $depcode
      */
@@ -109,6 +112,22 @@ class Spclty extends BaseEntity {
     public function getSpname()
     {
         return $this->spname;
+    }
+
+    /**
+     * @param mixed $background_path
+     */
+    public function setBackgroundPath($background_path)
+    {
+        $this->background_path = $background_path;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBackgroundPath()
+    {
+        return $this->background_path;
     }
 
 

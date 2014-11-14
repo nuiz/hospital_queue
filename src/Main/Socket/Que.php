@@ -9,13 +9,6 @@
 namespace Main\Socket;
 
 
-use Main\CTL\CallCTL;
-use Main\CTL\HideCTL;
-use Main\CTL\HideManyCTL;
-use Main\CTL\InitCTL;
-use Main\CTL\RemarkCTL;
-use Main\CTL\ShowCTL;
-use Main\CTL\SkipCTL;
 use Main\Helper\GeneralHelper;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
@@ -103,6 +96,7 @@ class Que implements MessageComponentInterface {
                 $this->getSubscribe($value)->attach($from);
 
                 echo "subscribe ".$value."\n";
+                flush();
             }
         }
         if(isset($json['publish'])){
@@ -117,9 +111,8 @@ class Que implements MessageComponentInterface {
                     )
                 )));
 
-                var_dump($sub);
-
                 echo "publish ".$json['publish']['name']."\n";
+                flush();
 
                 $subs->next();
             }

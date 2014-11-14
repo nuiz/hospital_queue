@@ -5,7 +5,17 @@
  * Date: 10/26/14
  * Time: 10:22 PM
  */
+
+$splctyList = isset($_GET['spclty'])? explode(",", $_GET['spclty']): false;
+
 $queEM = \Main\DB::queEM();
+
+$qb = $queEM->getRepository('Main\Entity\Que\Spclty')->createQueryBuilder('a');
+$q = $qb->getQuery();
+
+/** @var \Main\Entity\Que\Spclty[] $spcltys */
+$spcltys = $q->getResult();
+
 
 $qb = $queEM->getRepository('Main\Entity\Que\SoundPrefix1')->createQueryBuilder('a');
 $qb->orderBy('a.created_at');
@@ -63,16 +73,107 @@ HTML;
     </select>
 </div>
 <hr>
-<button type="button" class="btn" onclick="window.open('show.php', '', 'width=400, height='+screen.height);">เรียกหน้าต่างแสดงคิวแบบเล็ก</button>
+<form class="spclty-form">
+<?php
+foreach($spcltys as $key=> $item){
+    $number = $item->getSpclty();
+    $name = $item->getName();
+    $checked = !$splctyList || in_array($item->getSpclty(), $splctyList)? "checked": "";
+    $color = !$splctyList || in_array($item->getSpclty(), $splctyList)? "color: blue;": "";
+    echo <<<HTML
+    <label style="display: inline-block; width: 200px; {$color}"><input class="spclty-checkbox" type="checkbox" value="{$number}" {$checked}> {$name} </label>
+HTML;
+} ?>
+    <input type="hidden" name="spclty" value="<?php echo implode(',', (array)$splctyList);?>">
+    <br>
+    <button class="btn spclty-select-all" type="button">Select all</button> <button class="btn" type="submit">Display select</button>
+</form>
+<script type="text/javascript">
+$(function(){
+    var form = $('.spclty-form');
+    $('.spclty-checkbox').change(function(e){
+        var list = [];
+        $('.spclty-checkbox:checked').each(function(key, item){
+            list.push($(item).val());
+        });
+        $('input[name="spclty"]', form).val(list.join(','));
+    });
+
+    $('.spclty-select-all').click(function(e){
+        e.preventDefault();
+        $('.spclty-checkbox').prop('checked', true);
+    });
+});
+</script>
+<hr>
+<button type="button" class="btn open-show">เรียกหน้าต่างแสดงคิวแบบเล็ก</button>
 <hr>
 <div>
     <form class="form-inline scan-form" role="form">
         <div class="form-group">
-            <input type="text" class="form-control" placeholder="Human ID">
+            <input type="text" class="form-control input-scan" placeholder="Human ID">
         </div>
         <button type="submit" class="btn btn-default">Scan</button>
     </form>
 </div>
+<div class="row scan-user-block" style="display: none;">
+    <div class="col-md-4">
+        <img data-src="holder.js/140x140" class="img-thumbnail" alt="140x140" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAiIGhlaWdodD0iMTQwIj48cmVjdCB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjcwIiB5PSI3MCIgc3R5bGU9ImZpbGw6I2FhYTtmb250LXdlaWdodDpib2xkO2ZvbnQtc2l6ZToxMnB4O2ZvbnQtZmFtaWx5OkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmO2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjE0MHgxNDA8L3RleHQ+PC9zdmc+" style="width: 140px; height: 140px;">
+
+    </div>
+    <div class="col-md-8">
+        <h4 class="scan-hn"></h4>
+        <span class="scan-fname"></span>
+        <span class="scan-lname"></span>
+        <hr>
+        <div>
+            <button class="btn scan-call-btn">Call</button>
+            <button class="btn scan-hide-btn">Hide</button>
+            <button class="btn scan-skip-btn">Skip</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(function(){
+    var trScan;
+    $('.scan-call-btn').click(function(e){
+        $(this).prop('disabled', true);
+        if(!$('.call-btn', trScan).prop('disabled')){
+            $('.call-btn', trScan).click();
+        }
+    });
+    $('.scan-hide-btn').click(function(e){
+        $(this).prop('disabled', true);
+        if(!$('.hide-btn', trScan).prop('disabled')){
+            $('.hide-btn', trScan).click();
+        }
+    });
+    $('.scan-skip-btn').click(function(e){
+        $(this).prop('disabled', true);
+        if(!$('.skip-btn', trScan).prop('disabled')){
+            $('.skip-btn', trScan).click();
+        }
+    });
+
+    var block = $('.scan-user-block');
+    var input = $('.input-scan');
+    $('.scan-form').submit(function(e){
+        e.preventDefault();
+        trScan = $('.queTr[hn="'+input.val()+'"]').first();
+
+        var item = trScan.data('entity');
+        $('.scan-hn').text(item.hn);
+        $('.scan-fname').text(item.fname);
+        $('.scan-lname').text(item.lname);
+
+        $('.scan-hide-btn').text(item.is_hide? "show": "hide");
+
+        block.show();
+
+        input.val('');
+    });
+});
+</script>
 <hr>
 <div>
     <ul class="nav nav-tabs" role="tablist">
@@ -129,14 +230,32 @@ HTML;
         <td class="name"></td>
         <td class="vsttime"></td>
         <td>
-            <button class="call-btn">Call</button>
-            <button class="hide-btn">Hide</button>
-            <button class="skip-btn">Skip</button>
+            <button class="btn call-btn">Call</button>
+            <button class="btn hide-btn">Hide</button>
+            <button class="btn skip-btn">Skip</button>
         </td>
     </tr>
 </script>
 <script type="text/javascript">
 $(function(){
+    var spcltyList = <?php echo json_encode($splctyList);?>;
+    function isSpcltyAllow(spclty){
+        if(!spcltyList)
+            return true;
+        if(jQuery.inArray( spclty, spcltyList ) != -1)
+            return true;
+
+        return false;
+    }
+
+    $('.open-show').click(function(){
+        var url = 'show.php';
+        if(spcltyList){
+            url += "?spclty=" + spcltyList.join(',');
+        }
+        window.open(url, '', 'width=400, height='+screen.height);
+    });
+
     function createRow(item){
         var html = $('#queTr-template').text();
         var el = $(html);
@@ -151,31 +270,70 @@ $(function(){
         $('.name', el).text(item.fname + " " + item.lname);
         $('.vsttime', el).text(vsttime);
 
+        $(el).attr("hn", item.hn);
         $(el).attr("vn", item.vn);
         $(el).attr("id", item.id);
+        $(el).attr("vsttime", item.vsttime);
 
         $('.skip-btn', el).click(function(e){
+            var that = this;
             e.preventDefault();
+            $( that ).prop("disabled", true);
             $.post("api.php?ctl=QueCTL&method=skip", {id: item.id}, function(data){
+                $( that ).prop("disabled", false);
                 console.log(data);
             }, 'json');
         });
 
         $('.call-btn', el).click(function(e){
+            var that = this;
             e.preventDefault();
             var send = {
+                spclty: item.spclty,
                 fname: item.fname,
                 lname: item.lname,
                 prefix1_path: $('#prefix1_path').val(),
                 prefix2_path: $('#prefix2_path').val(),
                 prefix3_path: $('#prefix3_path').val()
             };
+            $( that ).prop("disabled", true);
             $.post("api.php?ctl=CallCTL&method=call", send, function(data){
+                $( that ).prop("disabled", false);
+
+                // trigger scan form
+                if($('.scan-hn').text() == item.hn){
+                    $('.scan-call-btn').prop('disabled', false);
+                }
+
                 console.log(data);
             }, 'json');
         });
 
+        $('.hide-btn', el).text(item.is_hide? "show": "hide").attr("is_hide", item.is_hide? "1": "0").click(function(e){
+            var that = this;
+            e.preventDefault();
+            $( that ).prop("disabled", true);
+
+            var send = {id: item.id};
+            if($(that).attr("is_hide")==0){
+                send.is_hide = 1;
+            }
+            else {
+                send.is_hide = 0;
+            }
+            $.post("api.php?ctl=QueCTL&method=hide", send, function(data){
+                $( that ).prop("disabled", false);
+                console.log(data);
+            }, 'json');
+        });
+
+        $(el).data('entity', item);
+
         return el;
+    };
+
+    function append(){
+
     }
 
     var conn;
@@ -195,7 +353,14 @@ $(function(){
                 var action = json.action;
                 if(action.name == 'QueCTL/gets'){
                     for(i in action.data){
-                        $('.show-queue-list').append(createRow(action.data[i]));
+                        if(!isSpcltyAllow(action.data[i].spclty)) continue;
+
+                        if(action.data[i].is_hide==true){
+                            $('.hide-queue-list').append(createRow(action.data[i]));
+                        }
+                        else {
+                            $('.show-queue-list').append(createRow(action.data[i]));
+                        }
                     }
                 }
             }
@@ -204,23 +369,82 @@ $(function(){
                 var pubName = json.publish.name;
                 var data = json.publish.data;
 
+
                 if(pubName=="add"){
+                    if(!isSpcltyAllow(data.spclty)) return;
                     $('.show-queue-list').append(createRow(data));
                 }
                 else if(pubName=="skip"){
+                    if(!isSpcltyAllow(data.spclty)) return;
                     $('.queTr[id="'+data.id+'"]').remove();
+
+                    // trigger scan form
+                    if($('.scan-hn').text() == data.hn){
+                        $('.scan-user-block').hide();
+                    }
+                }
+                else if(pubName=="hide"){
+                    if(!isSpcltyAllow(data.spclty)) return;
+                    var tr = $('.queTr[id="'+data.id+'"]');
+                    var table;
+                    if(data.is_hide==true){
+                        $('.hide-btn', tr).text('show').attr("is_hide", 1);
+                        table = $('.hide-queue-list').append(tr);
+                    }
+                    else {
+                        $('.hide-btn', tr).text('hide').attr("is_hide", 0);
+                        table = $('.show-queue-list').append(tr);
+                    }
+
+                    if($('.queTr:first', table).attr('vsttime') > data.vsttime){
+                        table.prepend(tr);
+                    }
+                    else if($('.queTr:last', table).attr('vsttime') < data.vsttime){
+                        table.append(tr);
+                    }
+                    else if($('.queTr', table).size() > 0) {
+                        $('.queTr', table).each(function(idex, item){
+                            if($(item).attr('vsttime') < data.vsttime && $(item).next().attr('vsttime') > data.vsttime){
+                                $(item).after(tr);
+                                return false;
+                            }
+                        });
+                    }
+                    else {
+                        table.append(tr);
+                    }
+
+                    tr.data('entity', data);
+
+                    // trigger scan form
+                    if($('.scan-hn').text() == data.hn){
+                        $('.scan-hide-btn').text($('.hide-btn', tr).text()).prop('disabled', false);
+                    }
+                }
+                else if(pubName=="clear"){
+//                    $('.show-queue-list tr').remove();
+//                    $('.hide-queue-list tr').remove();
+                    conn.close();
                 }
             }
         };
 
         conn.onerror = function(){
+            $('.show-queue-list tr').remove();
+            $('.hide-queue-list tr').remove();
+            setTimeout(function(){ skConnect(); }, 3000);
+        };
+
+        conn.onclose = function(){
+            $('.show-queue-list tr').remove();
+            $('.hide-queue-list tr').remove();
             setTimeout(function(){ skConnect(); }, 3000);
         };
 
         conn.onopen = function(){
             $('.show-queue-list tr').remove();
             $('.hide-queue-list tr').remove();
-            conn.send(JSON.stringify({ action: {name: 'QueCTL/gets'}, subscribe: ["add", "skip"] }));
+            conn.send(JSON.stringify({ action: {name: 'QueCTL/gets'}, subscribe: ["add", "skip", "hide", "clear"] }));
         }
     };
 
@@ -230,6 +454,8 @@ $(function(){
         var href = $(this).attr('href');
         $('.tab').hide();
         $(href).show();
+        $('.tab-btn').closest('li').removeClass('active');
+        $(this).closest('li').addClass('active');
     });
     $('.tab-btn').first().click();
 
