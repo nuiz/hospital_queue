@@ -1,5 +1,5 @@
 <?php
-
+// key = E0B35-03804-68D73-C848B-96B12
 require_once 'bootstrap.php';
 require_once 'src/Main/Helper/Checksum.php';
 
@@ -45,7 +45,7 @@ $action = isset($_GET['action'])? $_GET['action']: 'main';
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand">Hospital Queue</a>
+            <a href="index.php?action=main" class="navbar-brand">Hospital Queue</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
@@ -67,6 +67,28 @@ $action = isset($_GET['action'])? $_GET['action']: 'main';
 <?php
 include("view/".$action.".php");
 ?>
+    <div class="bs-callout bs-callout-info bg-white">
+        <h4>Hospital Queue</h4>
+        <p>
+            <span class="label label-default">v1.0</span>
+            <span class="label label-default">copyright by MRG- , Papangping</span>
+            <?php
+            $option = new stdClass();
+            $option->version = 1.0; // Application Version
+
+            $checksum = new Checksum($option);
+            if ($checksum->check("E0B35-03804-68D73-C848B-96B12")) {
+                echo <<<HTML
+                <span class="label label-info">license is valid</span>
+HTML;
+            } else {
+                echo <<<HTML
+                <span class="label label-danger">license not valid</span>
+HTML;
+            }
+            ?>
+        </p>
+    </div>
 </div>
 
 </body>

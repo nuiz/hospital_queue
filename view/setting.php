@@ -34,12 +34,15 @@
             <div>
             <div class="bs-callout bs-callout-info">
                 <h4>Other Function</h4>
-                <label>
+                <p>
                     <input class="show_people_name-checkbox" type="checkbox"> &nbsp; Show People Picture
-                </label>
-                <label>
+                </p>
+                <p>
                     <input class="call-auto-hide-checkbox" type="checkbox"> &nbsp; Hide Queue Auto after call
-                </label>
+                </p>
+                <p>
+                    <input class="call-auto-hide-checkbox" type="checkbox"> &nbsp; Auto Hide Time <input class="time-auto-hide" type="text" style="width: 40px" > &nbsp;  min
+                </p>
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
         </form>
