@@ -14,6 +14,10 @@ class GeneralHelper {
     }
 
     public static function base_url(){
+        return 'http://'.$_SERVER['HTTP_HOST'].'/hospital';
+    }
+
+    public static function host_url(){
         return 'http://localhost/hospital';
     }
 

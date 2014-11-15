@@ -85,7 +85,7 @@ class Que implements MessageComponentInterface {
             $action = explode("/", $json['action']['name']);
             $param = isset($json['action']['param'])? $json['action']['param']: null;
             $res = GeneralHelper::curl_post(
-                GeneralHelper::base_url()."/api.php?".http_build_query(array('ctl'=> $action[0], 'method'=> $action[1])),
+                GeneralHelper::host_url()."/api.php?".http_build_query(array('ctl'=> $action[0], 'method'=> $action[1])),
                 $param
             );
             $from->send(json_encode(array('action'=> array('name'=> $json['action']['name'], 'data'=> $res))));

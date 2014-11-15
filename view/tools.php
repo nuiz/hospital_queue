@@ -32,13 +32,25 @@
             }
         });
 
+        var callNumber = 1;
+        function callSync(){
+            $.isLoading({ text: "Loading..." + callNumber });
+            $.post("api.php?ctl=SyncCTL&method=que", {}, function(data){
+                if(data == 0){
+                    $.isLoading("hide");
+                    callNumber = 1;
+                }
+                else {
+                    callNumber++;
+                    callSync();
+                }
+            }, 'json');
+        }
+
         $('.sync-btn').click(function(e){
             e.preventDefault();
             if(window.confirm('Are you shure?')){
-                $.isLoading({ text: "Loading" });
-                $.post("api.php?ctl=SyncCTL&method=que", {}, function(data){
-                    $.isLoading("hide");
-                }, 'json');
+                callSync();
             }
         });
     });

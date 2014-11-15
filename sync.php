@@ -8,7 +8,8 @@
 
 require_once 'bootstrap.php';
 
+while(
 \Main\Helper\GeneralHelper::curl_post(\Main\Helper\GeneralHelper::base_url()."/api.php?".http_build_query(array(
     "ctl"=> "SyncCTL",
     "method"=> "que"
-)));
+))) == 0);

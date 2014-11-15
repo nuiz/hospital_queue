@@ -73,7 +73,7 @@ class SyncCTL extends BaseCTL {
 
         // sync table
         $qb = $hosEM->getRepository('Main\Entity\Hos\Ovst')->createQueryBuilder("a");
-        $qb->select("a");
+        $qb->select("a")->setMaxResults(50);
 
         if(!is_null($lastQue)){
 //            $qb->where("a.vstdate > :vstdate")->andWhere("a.vsttime > :vsttime")
@@ -88,6 +88,8 @@ class SyncCTL extends BaseCTL {
         $items = $q->getResult();
 
         $queEM->beginTransaction();
+
+        $res = 0;
 
         /** @var \Main\Entity\Hos\Ovst $value */
         foreach($items as $key=> $value){
@@ -121,6 +123,8 @@ class SyncCTL extends BaseCTL {
             $wsClient->sendData($json);
             unset($wsClient);
             unset($patient);
+
+            $res++;
         }
 
         // flush
@@ -131,6 +135,7 @@ class SyncCTL extends BaseCTL {
         catch(Exception $ex){
             $queEM->rollback();
         }
-        return true;
+
+        return $res;
     }
 }
