@@ -14,23 +14,34 @@
     min-height: 300px;
 }
 </style>
-<div>
-    <h3>Default setting</h3>
-    <form role="form" class="form-setting">
-        <div class="bg-block"></div>
-        <div class="form-group">
-            <label for="exampleInputFile">Background</label>
-            <input class="form-control input-background" type="file">
-            <p class="help-block">jpg, jpeg, png only</p>
-        </div>
-        <div class="checkbox">
-            <label>
-                <input class="show_people_name-checkbox" type="checkbox"> Show people name
-            </label>
-        </div>
-        <button type="submit" class="btn btn-default">Submit</button>
-    </form>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Default setting</h3>
+    </div>
+    <div class="panel-body">
+        <form role="form" class="form-setting">
+            <div class="bg-block"></div>
+            <div class="form-group">
+                <label for="exampleInputFile"><h4>Background Default</h4></label>
+                <input class="form-control input-background" type="file">
+                <p></p>
+                <div class="alert alert-warning alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <h4>Warning!</h4>
+                    jpg, jpeg, png only
+                </div>
+            </div>
+            <div>
+            <div class="bs-callout bs-callout-info">
+                <label>
+                    <input class="show_people_name-checkbox" type="checkbox"> &nbsp; Show People Picture
+                </label>
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    </div>
 </div>
+
 <script type="text/javascript">
     $(function(){
         var bgBlock = $('.bg-block');
