@@ -27,7 +27,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row" style="background-color: #ffffff;">
     <div class="col-md-4">
         <div>
             <button class="add-sound pull-right add-btn btn-primary" prefix="1">Add</button>

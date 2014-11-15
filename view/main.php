@@ -133,19 +133,25 @@ $(function(){
     });
 });
 </script>
-<div class="bs-callout bs-callout-info">
+<div class="bs-callout bs-callout-info bg-white">
     <button type="button" class="btn btn-default open-show">เรียกหน้าต่างแสดงคิวแบบเล็ก</button>
 </div>
 
-<div class="bs-callout bs-callout-warning">
+<div class="bs-callout bs-callout-warning bg-white">
     <form class="form-inline scan-form" role="form">
         <div class="form-group">
             <input type="text" class="form-control input-scan" placeholder="Human ID">
         </div>
         <button type="submit" class="btn btn-default">Scan</button>
+        <div style="padding-top: 10px;">
+            <span class="label label-primary">F9 : Focus</span>
+            <span class="label label-info">F6 : Call</span>
+            <span class="label label-warning">F7 : Hide</span>
+            <span class="label label-danger">F8 : Skip</span>
+        </div>
     </form>
 </div>
-<div class="row scan-user-block" style="display: none;">
+<div class="row scan-user-block bs-callout bs-callout-warning bg-white" style="display: none;">
     <div class="col-md-4">
         <img data-src="holder.js/140x140" class="img-thumbnail" alt="140x140" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAiIGhlaWdodD0iMTQwIj48cmVjdCB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjcwIiB5PSI3MCIgc3R5bGU9ImZpbGw6I2FhYTtmb250LXdlaWdodDpib2xkO2ZvbnQtc2l6ZToxMnB4O2ZvbnQtZmFtaWx5OkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmO2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjE0MHgxNDA8L3RleHQ+PC9zdmc+" style="width: 140px; height: 140px;">
 
@@ -156,9 +162,9 @@ $(function(){
         <span class="scan-lname"></span>
         <hr>
         <div>
-            <button class="btn scan-call-btn">Call</button>
-            <button class="btn scan-hide-btn">Hide</button>
-            <button class="btn scan-skip-btn">Skip</button>
+            <button class="btn scan-call-btn btn-info">Call</button>
+            <button class="btn scan-hide-btn btn-warning">Hide</button>
+            <button class="btn scan-skip-btn btn-danger">Skip</button>
         </div>
     </div>
 </div>
@@ -204,7 +210,7 @@ $(function(){
 });
 </script>
 
-<div class="bs-callout bs-callout-danger">
+<div class="bs-callout bs-callout-danger bg-white">
     <ul class="nav nav-tabs" role="tablist">
         <li class="active"><a href="#tab1" class="tab-btn">Show</a></li>
         <li><a href="#tab2" class="tab-btn">Hide</a></li>
@@ -259,19 +265,16 @@ $(function(){
         <td class="name"></td>
         <td class="vsttime"></td>
         <td>
-            <button class="btn call-btn">Call</button>
-            <button class="btn hide-btn">Hide</button>
-            <button class="btn skip-btn">Skip</button>
+            <button class="btn call-btn btn-info">Call</button>
+            <button class="btn hide-btn btn-warning">Hide</button>
+            <button class="btn skip-btn btn-danger">Skip</button>
         </td>
     </tr>
 </script>
 <script type="text/javascript">
 $(function(){
     $(".selecter_2").selecter();
-    $('.checkbox input').iCheck({
-        checkboxClass: 'icheckbox_flat',
-        increaseArea: '20%'
-    });
+
     var spcltyList = <?php echo json_encode($splctyList);?>;
     function isSpcltyAllow(spclty){
         if(!spcltyList)

@@ -10,8 +10,8 @@
 ?>
 <style type="text/css">
 .bg-block img {
-    min-width: 300px;
-    min-height: 300px;
+    width: 140px;
+    height: 140px;
 }
 </style>
 <div class="panel panel-primary">
@@ -33,8 +33,12 @@
             </div>
             <div>
             <div class="bs-callout bs-callout-info">
+                <h4>Other Function</h4>
                 <label>
                     <input class="show_people_name-checkbox" type="checkbox"> &nbsp; Show People Picture
+                </label>
+                <label>
+                    <input class="call-auto-hide-checkbox" type="checkbox"> &nbsp; Hide Queue Auto after call
                 </label>
             </div>
             <button type="submit" class="btn btn-default">Submit</button>

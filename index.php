@@ -33,7 +33,8 @@ $action = isset($_GET['action'])? $_GET['action']: 'main';
     <script src="bootflat/js/jquery.fs.selecter.min.js"></script>
     <script src="bootflat/js/jquery.fs.stepper.min.js"></script>
 </head>
-<body>
+<body style="background: #f1f1f1;">
+
 <!-- Fixed navbar -->
 <div class="navbar navbar-default" role="navigation">
     <div class="container">
