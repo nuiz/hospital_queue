@@ -36,58 +36,86 @@ $pfxs3 = $q->getResult();
 .tab {
     display: none;
 }
+    .boxtree {
+        display: inline-block;
+        width: 220px;
+        margin-right: 20px;
+    }
+
 </style>
-<div>
-    Prefix 1 <select id="prefix1_path">
-        <?php foreach($pfxs1 as $key=> $value){
-            $path = $value->getPath();
-            $name = $value->getName();
-            echo <<<HTML
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Sound Setting</h3>
+    </div>
+    <div class="panel-body">
+        <div class="boxtree">
+        <h4>Prefix 1</h4> <select id="prefix1_path" class="selecter_2">
+            <?php foreach($pfxs1 as $key=> $value){
+                $path = $value->getPath();
+                $name = $value->getName();
+                echo <<<HTML
         <option value="{$path}">{$name}</option>
 HTML;
 
-        }
-        ?>
-    </select>
-    Prefix 2 <select id="prefix2_path">
-        <?php foreach($pfxs2 as $key=> $value){
-            $path = $value->getPath();
-            $name = $value->getName();
-            echo <<<HTML
+            }
+            ?>
+
+        </select>
+        </div>
+        <div class="boxtree">
+            <h4>Prefix 2</h4> <select id="prefix2_path" class="selecter_2">
+            <?php foreach($pfxs2 as $key=> $value){
+                $path = $value->getPath();
+                $name = $value->getName();
+                echo <<<HTML
         <option value="{$path}">{$name}</option>
 HTML;
 
-        }
-        ?>
-    </select>
-    Prefix 3 <select id="prefix3_path">
-        <?php foreach($pfxs3 as $key=> $value){
-            $path = $value->getPath();
-            $name = $value->getName();
-            echo <<<HTML
+            }
+            ?>
+        </select>
+        </div>
+        <div class="boxtree">
+            <h4>Prefix 3</h4> <select id="prefix3_path" class="selecter_2">
+            <?php foreach($pfxs3 as $key=> $value){
+                $path = $value->getPath();
+                $name = $value->getName();
+                echo <<<HTML
         <option value="{$path}">{$name}</option>
 HTML;
 
-        }
-        ?>
-    </select>
+            }
+            ?>
+        </select>
+        </div>
+
+    </div>
 </div>
-<hr>
-<form class="spclty-form">
-<?php
-foreach($spcltys as $key=> $item){
-    $number = $item->getSpclty();
-    $name = $item->getName();
-    $checked = !$splctyList || in_array($item->getSpclty(), $splctyList)? "checked": "";
-    $color = !$splctyList || in_array($item->getSpclty(), $splctyList)? "color: blue;": "";
-    echo <<<HTML
-    <label style="display: inline-block; width: 200px; {$color}"><input class="spclty-checkbox" type="checkbox" value="{$number}" {$checked}> {$name} </label>
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <h3 class="panel-title">Department Setting</h3>
+    </div>
+    <div class="panel-body">
+        <form class="spclty-form">
+            <?php
+            foreach($spcltys as $key=> $item){
+                $number = $item->getSpclty();
+                $name = $item->getName();
+                $checked = !$splctyList || in_array($item->getSpclty(), $splctyList)? "checked": "";
+                $color = !$splctyList || in_array($item->getSpclty(), $splctyList)? "color: #3498DB;": "color: #6C7A89";
+                echo <<<HTML
+    <label style="display: inline-block; width: 200px; {$color}" ><input class="spclty-checkbox" type="checkbox" value="{$number}" {$checked}> {$name} </label>
 HTML;
-} ?>
-    <input type="hidden" name="spclty" value="<?php echo implode(',', (array)$splctyList);?>">
-    <br>
-    <button class="btn spclty-select-all" type="button">Select all</button> <button class="btn" type="submit">Display select</button>
-</form>
+            } ?>
+            <input type="hidden" name="spclty" value="<?php echo implode(',', (array)$splctyList);?>">
+            <hr>
+            <button class="spclty-select-all btn btn-info" type="button">Select all</button> <button class="btn btn-primary" type="submit">Display select</button>
+
+        </form>
+    </div>
+
+</div>
+
 <script type="text/javascript">
 $(function(){
     var form = $('.spclty-form');
@@ -105,10 +133,11 @@ $(function(){
     });
 });
 </script>
-<hr>
-<button type="button" class="btn open-show">เรียกหน้าต่างแสดงคิวแบบเล็ก</button>
-<hr>
-<div>
+<div class="bs-callout bs-callout-info">
+    <button type="button" class="btn btn-default open-show">เรียกหน้าต่างแสดงคิวแบบเล็ก</button>
+</div>
+
+<div class="bs-callout bs-callout-warning">
     <form class="form-inline scan-form" role="form">
         <div class="form-group">
             <input type="text" class="form-control input-scan" placeholder="Human ID">
@@ -174,8 +203,8 @@ $(function(){
     });
 });
 </script>
-<hr>
-<div>
+
+<div class="bs-callout bs-callout-danger">
     <ul class="nav nav-tabs" role="tablist">
         <li class="active"><a href="#tab1" class="tab-btn">Show</a></li>
         <li><a href="#tab2" class="tab-btn">Hide</a></li>
@@ -238,6 +267,11 @@ $(function(){
 </script>
 <script type="text/javascript">
 $(function(){
+    $(".selecter_2").selecter();
+    $('.checkbox input').iCheck({
+        checkboxClass: 'icheckbox_flat',
+        increaseArea: '20%'
+    });
     var spcltyList = <?php echo json_encode($splctyList);?>;
     function isSpcltyAllow(spclty){
         if(!spcltyList)
@@ -461,4 +495,5 @@ $(function(){
         e.preventDefault();
     });
 });
+
 </script>
