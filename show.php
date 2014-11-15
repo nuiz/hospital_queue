@@ -55,9 +55,12 @@ $spcltys = $q->getResult();
     <div class="span12 box">
         <div class="box-header red-background" style="font-size: 26px;
     font-weight: 200;
-    line-height: 50px;
+    line-height: 30px;
     padding: 10px 15px;
-    height: 50px;">
+    height: 50px;
+    background-color: #A0D468;
+    border-bottom: 4px solid #8CC152;
+    ">
             <div class="text-left title">
                 <i class="glyphicon glyphicon-list-alt"></i> รายชื่อคิว <span id="time" class="pull-right"></span>
             </div>

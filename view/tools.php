@@ -6,9 +6,17 @@
  * Time: 10:22 PM
  */
 ?>
-<button class="clear-btn">Clear queue</button>
-<button class="hide-btn">Hide all queue</button>
-<button class="sync-btn">Sync all queue</button>
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">Tools </h3>
+    </div>
+    <div class="panel-body">
+        <button class="clear-btn">Clear queue</button>
+        <button class="hide-btn">Hide all queue</button>
+        <button class="sync-btn">Sync all queue</button>
+    </div>
+</div>
+
 
 <script type="text/javascript">
     $(function(e){

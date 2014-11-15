@@ -30,7 +30,7 @@
 <div class="row">
     <div class="col-md-4">
         <div>
-            <button class="add-sound pull-right add-btn" prefix="1">Add</button>
+            <button class="add-sound pull-right add-btn btn-primary" prefix="1">Add</button>
             <h3>Prefix 1</h3>
         </div>
         <table class='table table-bordered'>
@@ -49,7 +49,7 @@
     </div>
     <div class="col-md-4">
         <div>
-            <button class="add-sound pull-right add-btn" prefix="2">Add</button>
+            <button class="add-sound pull-right add-btn btn-primary" prefix="2">Add</button>
             <h3>Prefix 2</h3>
         </div>
         <table class='table table-bordered'>
@@ -68,7 +68,7 @@
     </div>
     <div class="col-md-4">
         <div>
-            <button class="add-sound pull-right add-btn" prefix="3">Add</button>
+            <button class="add-sound pull-right add-btn btn-primary" prefix="3">Add</button>
             <h3>Prefix 3</h3>
         </div>
         <table class='table table-bordered'>
@@ -160,7 +160,7 @@ $(function(){
     <tr>
         <td>{{name}}</td>
         <td>
-            <button class="remove-btn" href="{{deleteHref}}">Delete</button>
+            <button class="remove-btn btn btn-danger" href="{{deleteHref}}">Delete</button>
         </td>
     </tr>
 </script>
