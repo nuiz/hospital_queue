@@ -25,15 +25,25 @@ $spcltys = $q->getResult();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hospital Queue</title>
 
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="js/jquery-migrate-1.2.1.min.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="css/bootstrap-theme.min.css">-->
+    <link rel="stylesheet" href="css/docs.css">
+    <link rel="stylesheet" href="bootflat/css/bootflat.min.css">
     <link rel="stylesheet" href="css/main.css">
 
-    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script src="js/jquery.isloading.min.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <script src="bootflat/js/icheck.min.js"></script>
+    <script src="bootflat/js/jquery.fs.selecter.min.js"></script>
+    <script src="bootflat/js/jquery.fs.stepper.min.js"></script>
 </head>
 <body>
 <style type="text/css">
