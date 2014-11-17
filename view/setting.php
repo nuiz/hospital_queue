@@ -41,6 +41,9 @@
                     <input class="call-auto-hide-checkbox" type="checkbox"> &nbsp; Hide Queue Auto after call
                 </p>
                 <p>
+                    <input class="scan-auto-call-checkbox" type="checkbox"> &nbsp; Call after scan
+                </p>
+                <p>
                     <input class="call-auto-hide-checkbox" type="checkbox"> &nbsp; Auto Hide Time <input class="time-auto-hide" type="text" style="width: 40px" > &nbsp;  min
                 </p>
             </div>
