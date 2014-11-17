@@ -27,6 +27,24 @@ class SoundCTL extends BaseCTL {
             }
             else if($this->param['prefix']=='2'){
                 $sp = new SoundPrefix2();
+                $name = $this->param['picture']['name'];
+                $ext = explode('.', $name);
+                $ext = array_pop($ext);
+
+                $allow = array("jpg", "jpeg", "png");
+                if(!in_array($ext, $allow)){
+                    return array(
+                        'error'=> array(
+                            'message'=> 'Not allow extension'
+                        )
+                    );
+                }
+
+                $des = 'picture/'.uniqid().'.'.$ext;
+                move_uploaded_file($this->param['picture']['tmp_name'], $des);
+
+                $sp->setPicturePath($des);
+                $sp->setRoomName($this->param['room_name']);
             }
             else if($this->param['prefix']=='3'){
                 $sp = new SoundPrefix3();
@@ -83,11 +101,16 @@ class SoundCTL extends BaseCTL {
             }
             $entity = $queEM->getRepository($eName)->findOneBy(array('id' => $this->param['id']));
             $path = $entity->getPath();
+            $picPath = $this->param['prefix']=='2'? $entity->getPicturePath(): false;
             $queEM->remove($entity);
             $queEM->flush();
             $queEM->commit();
 
             @unlink($path);
+            if($picPath){
+                @unlink($picPath);
+            }
+
             return true;
         }
         catch (Exception $ex) {

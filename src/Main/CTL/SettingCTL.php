@@ -60,6 +60,15 @@ class SettingCTL extends BaseCTL {
         if(isset($this->param['show_people_name'])){
             $item->setShowPeopleName((bool)$this->param['show_people_name']);
         }
+        if(isset($this->param['hide_after_call'])){
+            $item->setHideAfterCall((bool)$this->param['hide_after_call']);
+        }
+        if(isset($this->param['call_after_scan'])){
+            $item->setCallAfterScan((bool)$this->param['call_after_scan']);
+        }
+        if(isset($this->param['auto_hide_time'])){
+            $item->setAutoHideTime($this->param['auto_hide_time']);
+        }
 
         $queEM->merge($item);
         $queEM->flush();

@@ -76,7 +76,7 @@ include("view/".$action.".php");
             <span class="label label-default">v1.0</span>
             <span class="label label-default">copyright by MRG- , Papangping</span>
             <?php
-
+            $check = true;
             if ($check) {
                 echo <<<HTML
                 <span class="label label-info">license is valid</span>

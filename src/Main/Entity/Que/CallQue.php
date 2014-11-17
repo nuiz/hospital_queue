@@ -24,13 +24,13 @@ class CallQue extends BaseEntity {
     protected $spclty;
 
     /** @Column(type="string") */
-    protected $prefix1_path;
+    protected $prefix1_id;
 
     /** @Column(type="string") */
-    protected $prefix2_path;
+    protected $prefix2_id;
 
     /** @Column(type="string") */
-    protected $prefix3_path;
+    protected $prefix3_id;
 
     /**
      * @param mixed $fname
@@ -46,22 +46,6 @@ class CallQue extends BaseEntity {
     public function getFname()
     {
         return $this->fname;
-    }
-
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -81,51 +65,51 @@ class CallQue extends BaseEntity {
     }
 
     /**
-     * @param mixed $prefix1_path
+     * @param mixed $prefix1_id
      */
-    public function setPrefix1Path($prefix1_path)
+    public function setPrefix1Id($prefix1_id)
     {
-        $this->prefix1_path = $prefix1_path;
+        $this->prefix1_id = $prefix1_id;
     }
 
     /**
      * @return mixed
      */
-    public function getPrefix1Path()
+    public function getPrefix1Id()
     {
-        return $this->prefix1_path;
+        return $this->prefix1_id;
     }
 
     /**
-     * @param mixed $prefix2_path
+     * @param mixed $prefix2_id
      */
-    public function setPrefix2Path($prefix2_path)
+    public function setPrefix2Id($prefix2_id)
     {
-        $this->prefix2_path = $prefix2_path;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPrefix2Path()
-    {
-        return $this->prefix2_path;
-    }
-
-    /**
-     * @param mixed $prefix3_path
-     */
-    public function setPrefix3Path($prefix3_path)
-    {
-        $this->prefix3_path = $prefix3_path;
+        $this->prefix2_id = $prefix2_id;
     }
 
     /**
      * @return mixed
      */
-    public function getPrefix3Path()
+    public function getPrefix2Id()
     {
-        return $this->prefix3_path;
+        return $this->prefix2_id;
+    }
+
+    /**
+     * @param mixed $prefix3_id
+     */
+    public function setPrefix3Id($prefix3_id)
+    {
+        $this->prefix3_id = $prefix3_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrefix3Id()
+    {
+        return $this->prefix3_id;
     }
 
     /**
@@ -143,6 +127,4 @@ class CallQue extends BaseEntity {
     {
         return $this->spclty;
     }
-
-
 }

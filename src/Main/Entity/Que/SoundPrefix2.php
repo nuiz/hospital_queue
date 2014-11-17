@@ -19,6 +19,12 @@ class SoundPrefix2 extends BaseEntity {
     /** @Column(type="string") */
     protected $path;
 
+    /** @Column(type="string") */
+    protected $picture_path;
+
+    /** @Column(type="string") */
+    protected $room_name;
+
     /**
      * @param mixed $name
      */
@@ -51,5 +57,35 @@ class SoundPrefix2 extends BaseEntity {
         return $this->path;
     }
 
+    /**
+     * @param mixed $picture_path
+     */
+    public function setPicturePath($picture_path)
+    {
+        $this->picture_path = $picture_path;
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getPicturePath()
+    {
+        return $this->picture_path;
+    }
+
+    /**
+     * @param mixed $room_name
+     */
+    public function setRoomName($room_name)
+    {
+        $this->room_name = $room_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRoomName()
+    {
+        return $this->room_name;
+    }
 } 

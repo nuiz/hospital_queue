@@ -43,6 +43,35 @@ $pfxs3 = $q->getResult();
     }
 
 </style>
+<script type="text/javascript">
+var ajaxBackEnd = {};
+    ajaxBackEnd.call = function(item, callback){
+        var that = this;
+        e.preventDefault();
+
+        var send = {
+            spclty: item.spclty,
+            fname: item.fname,
+            lname: item.lname,
+            prefix1_id: $('#prefix1_path').val(),
+            prefix2_id: $('#prefix2_path').val(),
+            prefix3_id: $('#prefix3_path').val()
+        };
+        $(that).prop("disabled", true);
+        $.post("api.php?ctl=CallCTL&method=call", send, function(data){
+            callback(data);
+
+            $( that ).prop("disabled", false);
+
+            // trigger scan form
+            if($('.scan-hn').text() == item.hn){
+                $('.scan-call-btn').prop('disabled', false);
+            }
+
+            console.log(data);
+        }, 'json');
+    };
+</script>
 <div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title"><span class="glyphicon glyphicon-volume-down" aria-hidden="true"></span> Sound Setting</h3>
@@ -51,10 +80,10 @@ $pfxs3 = $q->getResult();
         <div class="boxtree">
         <h4>Prefix 1</h4> <select id="prefix1_path" class="selecter_2">
             <?php foreach($pfxs1 as $key=> $value){
-                $path = $value->getPath();
+                $id = $value->getId();
                 $name = $value->getName();
                 echo <<<HTML
-        <option value="{$path}">{$name}</option>
+        <option value="{$id}">{$name}</option>
 HTML;
 
             }
@@ -65,10 +94,10 @@ HTML;
         <div class="boxtree">
             <h4>Prefix 2</h4> <select id="prefix2_path" class="selecter_2">
             <?php foreach($pfxs2 as $key=> $value){
-                $path = $value->getPath();
+                $id = $value->getId();
                 $name = $value->getName();
                 echo <<<HTML
-        <option value="{$path}">{$name}</option>
+        <option value="{$id}">{$name}</option>
 HTML;
 
             }
@@ -78,10 +107,10 @@ HTML;
         <div class="boxtree">
             <h4>Prefix 3</h4> <select id="prefix3_path" class="selecter_2">
             <?php foreach($pfxs3 as $key=> $value){
-                $path = $value->getPath();
+                $id = $value->getId();
                 $name = $value->getName();
                 echo <<<HTML
-        <option value="{$path}">{$name}</option>
+        <option value="{$id}">{$name}</option>
 HTML;
 
             }
@@ -192,8 +221,13 @@ $(function(){
 
     var block = $('.scan-user-block');
     var input = $('.input-scan');
+
     $('.scan-form').submit(function(e){
         e.preventDefault();
+        $.post('api.php?ctl=QueCTL&method=searchByHn', {}, function(data){
+
+        }, 'json');
+
         trScan = $('.queTr[hn="'+input.val()+'"]').first();
 
         var item = trScan.data('entity');
@@ -325,13 +359,14 @@ $(function(){
         $('.call-btn', el).click(function(e){
             var that = this;
             e.preventDefault();
+
             var send = {
                 spclty: item.spclty,
                 fname: item.fname,
                 lname: item.lname,
-                prefix1_path: $('#prefix1_path').val(),
-                prefix2_path: $('#prefix2_path').val(),
-                prefix3_path: $('#prefix3_path').val()
+                prefix1_id: $('#prefix1_path').val(),
+                prefix2_id: $('#prefix2_path').val(),
+                prefix3_id: $('#prefix3_path').val()
             };
             $( that ).prop("disabled", true);
             $.post("api.php?ctl=CallCTL&method=call", send, function(data){

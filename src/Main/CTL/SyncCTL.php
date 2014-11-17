@@ -67,13 +67,15 @@ class SyncCTL extends BaseCTL {
         $queEM = DB::queEM();
         $hosEM = DB::hosEM();
 
+        $max = isset($this->param['max'])? $this->param['max']: 30;
+
         $hosEM->clear();
 
         $lastQue = $queEM->getRepository('Main\Entity\Que\Que')->findOneBy(array(), array('vstdate'=> 'DESC', 'vsttime'=> 'DESC'));
 
         // sync table
         $qb = $hosEM->getRepository('Main\Entity\Hos\Ovst')->createQueryBuilder("a");
-        $qb->select("a")->setMaxResults(50);
+        $qb->select("a")->setMaxResults($max);
 
         if(!is_null($lastQue)){
 //            $qb->where("a.vstdate > :vstdate")->andWhere("a.vsttime > :vsttime")
@@ -120,6 +122,35 @@ class SyncCTL extends BaseCTL {
                     'data'=> $item
                 )
             ));
+
+            // name sound
+            $firstname_path = 'sound/google/'.base64_encode($item->getFname()).'.mp3';
+            $lastname_path = 'sound/google/'.base64_encode($item->getLname()).'.mp3';
+
+            $firstname_len = @file_get_contents($firstname_path);
+            if (!is_file($firstname_path) || strlen($firstname_len)===0) {
+                $lang = preg_match('/[ก-๙]/i', $item->getFname())? 'th': 'en';
+                $fcontent = file_get_contents("http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".urlencode(trim($item->getFname())));
+                $fp = fopen($firstname_path, 'w');
+                fwrite($fp, $fcontent);
+                fclose($fp);
+
+                unset($fcontent);
+                unset($fp);
+            }
+
+            $lastname_len = @file_get_contents($lastname_path);
+            if (!is_file($lastname_path) || strlen($lastname_len)===0) {
+                $lang = preg_match('/[ก-๙]/i', $item->getLname())? 'th': 'en';
+                $lcontent = file_get_contents("http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".urlencode(trim($item->getLname())));
+                $fp = fopen($lastname_path, 'w');
+                fwrite($fp, $lcontent);
+                fclose($fp);
+
+                unset($lcontent);
+                unset($fp);
+            }
+
             $wsClient->sendData($json);
             unset($wsClient);
             unset($patient);

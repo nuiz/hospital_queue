@@ -18,17 +18,25 @@
                 <form role="form" id="add-form" method="post">
                     <div class="form-group">
                         <label>Name</label>
-                        <input type="text" class="form-control" name="name" placeholder="Enter name">
+                        <input type="text" class="form-control name-val" name="name" placeholder="Enter name">
+                    </div>
+                    <div class="form-group show-prefix2" style="display: none;">
+                        <label>Picture</label>
+                        <input type="file" class="form-control picture-input" name="picture">
+                    </div>
+                    <div class="form-group show-prefix2" style="display: none;">
+                        <label>Room name</label>
+                        <input type="text" class="form-control room_name-input" name="room_name">
                     </div>
                     <input type="hidden" name="prefix" id="prefix-val" value="1">
-                    <button type="submit" class="btn btn-default">Submit</button>
+                    <button type="submit" class="btn btn-default submit-btn">Submit</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 <div class="row" style="background-color: #ffffff;">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div>
             <button class="add-sound pull-right add-btn btn-primary" prefix="1">Add</button>
             <h3>Prefix 1</h3>
@@ -47,7 +55,7 @@
             </tbody>
         </table>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div>
             <button class="add-sound pull-right add-btn btn-primary" prefix="2">Add</button>
             <h3>Prefix 2</h3>
@@ -59,6 +67,12 @@
                     Sound
                 </th>
                 <th>
+                    Picture
+                </th>
+                <th>
+                    Room name
+                </th>
+                <th>
                 </th>
             </tr>
             </thead>
@@ -66,7 +80,7 @@
             </tbody>
         </table>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div>
             <button class="add-sound pull-right add-btn btn-primary" prefix="3">Add</button>
             <h3>Prefix 3</h3>
@@ -93,12 +107,20 @@ $(function(){
 
     function createRow(item, prefix){
         var html = $('#template-row').html();
+        if(prefix == 2){
+            html = $('#template-row2').html();
+            html = html.replace('{{picture}}', item.picture_path);
+            html = html.replace('{{room_name}}', item.room_name);
+        }
         html = html.replace('{{name}}', item.name);
         html = html.replace('{{deleteHref}}', 'api.php?ctl=SoundCTL&method=remove&prefix='+prefix+'&id='+item.id);
 
         var el = $(html);
         $('.remove-btn', el).click(function(e){
             e.preventDefault();
+            if(!window.confirm('Are you shure?')){
+                return;
+            }
             $.isLoading({ text: "Loading" });
             $.post($(this).attr('href'), {}, function(data){
                 $.isLoading( "hide" );
@@ -140,25 +162,80 @@ $(function(){
 
     $('.add-btn').click(function(e){
         e.preventDefault();
-        $('#addModal input[name="prefix"]').val($(this).attr('prefix'));
+        $('#addModal input').val("");
+
+        var prefix = $(this).attr('prefix');
+        $('#addModal input[name="prefix"]').val(prefix);
+        if(prefix == 2){
+            $('.show-prefix2').show();
+        }
+        else {
+            $('.show-prefix2').hide();
+        }
         $('#addModal').modal();
     });
 
     $('#add-form').submit(function(e){
         e.preventDefault();
-        $.post("api.php?ctl=SoundCTL&method=add", $(this).serialize(), function(data){
-            if(typeof data.error != "undefined"){
-                console.log(data);
+
+        var prefix = $('#prefix-val').val();
+        var name = $('.name-val').val();
+
+        var send = new FormData();
+
+        // set data to request
+        send.append('prefix', prefix);
+        send.append('name', name);
+
+        if(name.trim() == ""){
+            alert("Please fill in complete data.");
+            return;
+        }
+        if(prefix == 2){
+            var files = $('.picture-input')[0].files;
+            if(files.length > 0){
+                send.append('picture', files[0]);
+            }
+            else {
+                alert("Please fill in complete data.");
                 return;
             }
-            window.location.reload(true);
-        }, 'json');
+            send.append('room_name', $('.room_name-input').val());
+        }
+
+        var submitBtn = $('.submit-btn');
+        submitBtn.prop('disabled', true);
+        $.ajax({
+            url: "api.php?ctl=SoundCTL&method=add",
+            data: send,
+            type: "POST",
+            processData: false,  // tell jQuery not to process the data
+            contentType: false,   // tell jQuery not to set contentType,
+            success: function(data){
+                if(typeof data.error != "undefined"){
+                    console.log(data);
+                    return;
+                }
+                window.location.reload(true);
+            },
+            dataType: 'json'
+        });
     });
 });
 </script>
 <script type="text/template" id="template-row">
     <tr>
         <td>{{name}}</td>
+        <td>
+            <button class="remove-btn btn btn-danger" href="{{deleteHref}}">Delete</button>
+        </td>
+    </tr>
+</script>
+<script type="text/template" id="template-row2">
+    <tr>
+        <td>{{name}}</td>
+        <td><img src="{{picture}}" width="64" height="64"></td>
+        <td>{{room_name}}</td>
         <td>
             <button class="remove-btn btn btn-danger" href="{{deleteHref}}">Delete</button>
         </td>

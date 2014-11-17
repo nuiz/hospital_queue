@@ -18,9 +18,9 @@ class CallCTL extends BaseCTL {
         $call = new \Main\Entity\Que\CallQue();
         $call->setFname($this->param['fname']);
         $call->setLname($this->param['lname']);
-        $call->setPrefix1Path($this->param['prefix1_path']);
-        $call->setPrefix2Path($this->param['prefix2_path']);
-        $call->setPrefix3Path($this->param['prefix3_path']);
+        $call->setPrefix1Id($this->param['prefix1_id']);
+        $call->setPrefix2Id($this->param['prefix2_id']);
+        $call->setPrefix3Id($this->param['prefix3_id']);
         $call->setSpclty($this->param['spclty']);
 
         $queEm->persist($call);
@@ -34,6 +34,7 @@ class CallCTL extends BaseCTL {
                 'data'=> $call
             )
         );
+
         $wsClient->sendData(json_encode($json));
         unset($wsClient);
         unset($patient);

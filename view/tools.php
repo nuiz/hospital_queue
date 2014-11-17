@@ -17,7 +17,6 @@
     </div>
 </div>
 
-
 <script type="text/javascript">
     $(function(e){
         $('.clear-btn').click(function(e){
@@ -40,13 +39,13 @@
             }
         });
 
-        var callNumber = 1;
+        var callNumber = 0;
         function callSync(){
             $.isLoading({ text: "Loading..." + callNumber });
-            $.post("api.php?ctl=SyncCTL&method=que", {}, function(data){
+            $.post("api.php?ctl=SyncCTL&method=que", {max: 5}, function(data){
                 if(data == 0){
                     $.isLoading("hide");
-                    callNumber = 1;
+                    callNumber += data;
                 }
                 else {
                     callNumber++;

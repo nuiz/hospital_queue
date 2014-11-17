@@ -80,4 +80,15 @@ class QueCTL extends BaseCTL {
             unset($wsClient);
         }
     }
+
+    public function searchByHn(){
+        $queEM = DB::queEM();
+
+        /** @var \Main\Entity\Que\Que $item */
+        $item = $queEM->getRepository('Main\Entity\Que\Que')->findOneBy(array(
+            'hn'=> $this->param['hn']
+        ));
+
+        return $item;
+    }
 }

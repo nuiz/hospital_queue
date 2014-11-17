@@ -27,7 +27,7 @@
                 <p></p>
                 <div class="alert alert-warning alert-dismissable">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    <h4>Warning!</h4>
+<!--                    <h4>Warning!</h4>-->
                     jpg, jpeg, png only
                 </div>
             </div>
@@ -38,13 +38,13 @@
                     <input class="show_people_name-checkbox" type="checkbox"> &nbsp; Show People Picture
                 </p>
                 <p>
-                    <input class="call-auto-hide-checkbox" type="checkbox"> &nbsp; Hide Queue Auto after call
+                    <input class="hide_after_call-checkbox" type="checkbox"> &nbsp; Hide Queue Auto after call
                 </p>
                 <p>
-                    <input class="scan-auto-call-checkbox" type="checkbox"> &nbsp; Call after scan
+                    <input class="call_after_scan-checkbox" type="checkbox"> &nbsp; Call after scan
                 </p>
                 <p>
-                    <input class="call-auto-hide-checkbox" type="checkbox"> &nbsp; Auto Hide Time <input class="time-auto-hide" type="text" style="width: 40px" > &nbsp;  min
+                    Auto Hide Time <input class="time-auto-hide" type="text" style="width: 40px" > &nbsp;  min
                 </p>
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
@@ -69,7 +69,11 @@
             bgBlock.html('');
             bgBlock.append(img);
 
+            // set view from response
             $('.show_people_name-checkbox').prop("checked", data.show_people_name);
+            $('.hide_after_call-checkbox').prop("checked", data.hide_after_call);
+            $('.call_after_scan-checkbox').prop("checked", data.call_after_scan);
+            $('.time-auto-hide').val(data.auto_hide_time);
         });
 
         $('.form-setting').submit(function(e){
@@ -79,7 +83,12 @@
             if(files.length > 0){
                 send.append('background', files[0]);
             }
+
+            // set data to request
             send.append('show_people_name', $('.show_people_name-checkbox').prop("checked")? 1: 0);
+            send.append('hide_after_call', $('.hide_after_call-checkbox').prop("checked")? 1: 0);
+            send.append('call_after_scan', $('.call_after_scan-checkbox').prop("checked")? 1: 0);
+            send.append('auto_hide_time', $('.time-auto-hide').val());
 
             $.isLoading({ text: "Loading" });
 
