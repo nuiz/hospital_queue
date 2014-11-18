@@ -19,13 +19,18 @@ class PicCTL extends BaseCTL {
         $item = $hosEM->getRepository('Main\Entity\Hos\PatientImage')->find($this->param['hn']);
 
         if(!is_null($item)){
-            $file = $item->getImage();
-            $response = new \Symfony\Component\HttpFoundation\Response(stream_get_contents($file), 200, array(
-                'Content-Type' => 'image/jpeg',
-                'Content-Length' => sizeof($file)
-            ));
+//            $file = $item->getImage();
+//            $response = new \Symfony\Component\HttpFoundation\Response(stream_get_contents($file), 200, array(
+//                'Content-Type' => 'image/jpeg',
+//                'Content-Length' => sizeof($file)
+//            ));
+//
+//            $response->send();
+            $type = mime_content_type($item->getImage());
+            header('Content-Type: '.$type);
 
-            $response->send();
+            echo stream_get_contents($item->getImage());
+            exit();
         }
     }
 } 

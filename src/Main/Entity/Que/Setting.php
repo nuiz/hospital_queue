@@ -45,19 +45,19 @@ class Setting extends BaseEntity {
     }
 
     /**
-     * @param mixed $show_people_name
+     * @param mixed $show_people_picture
      */
-    public function setShowPeopleName($show_people_name)
+    public function setShowPeoplePicture($show_people_picture)
     {
-        $this->show_people_name = $show_people_name;
+        $this->show_people_picture = $show_people_picture;
     }
 
     /**
      * @return mixed
      */
-    public function getShowPeopleName()
+    public function getShowPeoplePicture()
     {
-        return $this->show_people_name;
+        return $this->show_people_picture;
     }
 
     /**

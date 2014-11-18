@@ -15,6 +15,9 @@ namespace Main\Entity\Que;
  */
 class CallQue extends BaseEntity {
     /** @Column(type="string") */
+    protected $hn;
+
+    /** @Column(type="string") */
     protected $fname;
 
     /** @Column(type="string") */
@@ -31,6 +34,22 @@ class CallQue extends BaseEntity {
 
     /** @Column(type="string") */
     protected $prefix3_id;
+
+    /**
+     * @param mixed $hn
+     */
+    public function setHn($hn)
+    {
+        $this->hn = $hn;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHn()
+    {
+        return $this->hn;
+    }
 
     /**
      * @param mixed $fname

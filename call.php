@@ -23,6 +23,13 @@ else {
     $bgUrl = $spclty->getBackgroundPath();
 }
 
+if($setting->getShowPeoplePicture()){
+    $hnUrl = "api.php?ctl=PicCTL&method=displayByHn&hn=".$call->getHn();
+}
+else {
+    $hnUrl = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAiIGhlaWdodD0iMTQwIj48cmVjdCB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjcwIiB5PSI3MCIgc3R5bGU9ImZpbGw6I2FhYTtmb250LXdlaWdodDpib2xkO2ZvbnQtc2l6ZToxMnB4O2ZvbnQtZmFtaWx5OkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmO2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjE0MHgxNDA8L3RleHQ+PC9zdmc+";
+}
+
 // name sound
 $firstname_path = 'sound/google/'.base64_encode($call->getFname()).'.mp3';
 $lastname_path = 'sound/google/'.base64_encode($call->getLname()).'.mp3';
@@ -120,7 +127,7 @@ $lname_url = "http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".
     <div class='col-md-6'>
         <div class="box-content box-double-padding text-center">
             <div style="padding-top: 50px;">
-                <img data-src="holder.js/140x140" class="img-thumbnail" alt="140x140" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAiIGhlaWdodD0iMTQwIj48cmVjdCB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjcwIiB5PSI3MCIgc3R5bGU9ImZpbGw6I2FhYTtmb250LXdlaWdodDpib2xkO2ZvbnQtc2l6ZToxMnB4O2ZvbnQtZmFtaWx5OkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmO2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjE0MHgxNDA8L3RleHQ+PC9zdmc+" style="width: 240px; height: 240px;">
+                <img data-src="holder.js/140x140" class="img-thumbnail hn-image" alt="140x140" src="<?php echo $hnUrl;?>" style="width: 240px; height: 240px;">
                 <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 70px; line-height: 80px;"><?php echo $call->getFName()." ".$call->getLname();?></h1>
             </div>
         </div>
@@ -196,6 +203,12 @@ $lname_url = "http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".
         prefix3.addEventListener('error', function failed(e){
             setTimeout(function(){ window.close(); }, 3000);
         }, true);
+
+        var nImg = $('.hn-image')[0];
+
+        nImg.onerror = function() {
+            nImg.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNDAiIGhlaWdodD0iMTQwIj48cmVjdCB3aWR0aD0iMTQwIiBoZWlnaHQ9IjE0MCIgZmlsbD0iI2VlZSIvPjx0ZXh0IHRleHQtYW5jaG9yPSJtaWRkbGUiIHg9IjcwIiB5PSI3MCIgc3R5bGU9ImZpbGw6I2FhYTtmb250LXdlaWdodDpib2xkO2ZvbnQtc2l6ZToxMnB4O2ZvbnQtZmFtaWx5OkFyaWFsLEhlbHZldGljYSxzYW5zLXNlcmlmO2RvbWluYW50LWJhc2VsaW5lOmNlbnRyYWwiPjE0MHgxNDA8L3RleHQ+PC9zdmc+";
+        }
     });
 
 

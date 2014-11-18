@@ -236,7 +236,8 @@ $(function(){
             lname: searchItem.lname,
             prefix1_id: $('#prefix1_path').val(),
             prefix2_id: $('#prefix2_path').val(),
-            prefix3_id: $('#prefix3_path').val()
+            prefix3_id: $('#prefix3_path').val(),
+            hn: searchItem.hn
         };
         $( that ).prop("disabled", true);
         $.post("api.php?ctl=CallCTL&method=call", send, function(data){
@@ -379,7 +380,8 @@ $(function(){
                 lname: item.lname,
                 prefix1_id: $('#prefix1_path').val(),
                 prefix2_id: $('#prefix2_path').val(),
-                prefix3_id: $('#prefix3_path').val()
+                prefix3_id: $('#prefix3_path').val(),
+                hn: item.hn
             };
             $( that ).prop("disabled", true);
             $.post("api.php?ctl=CallCTL&method=call", send, function(data){

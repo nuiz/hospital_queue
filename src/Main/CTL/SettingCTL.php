@@ -20,7 +20,6 @@ class SettingCTL extends BaseCTL {
             copy("default/background.jpg", 'picture/background.jpg');
             $item = new Setting();
             $item->setBackgroundPath('picture/background.jpg');
-            $item->setShowPeopleName(true);
 
             $queEM->persist($item);
             $queEM->flush();
@@ -57,8 +56,8 @@ class SettingCTL extends BaseCTL {
 
             $item->setBackgroundPath($des);
         }
-        if(isset($this->param['show_people_name'])){
-            $item->setShowPeopleName((bool)$this->param['show_people_name']);
+        if(isset($this->param['show_people_picture'])){
+            $item->setShowPeoplePicture((bool)$this->param['show_people_picture']);
         }
         if(isset($this->param['hide_after_call'])){
             $item->setHideAfterCall((bool)$this->param['hide_after_call']);

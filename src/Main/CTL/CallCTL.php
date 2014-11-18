@@ -16,6 +16,7 @@ class CallCTL extends BaseCTL {
         $queEm = DB::queEM();
 
         $call = new \Main\Entity\Que\CallQue();
+        $call->setHn($this->param['hn']);
         $call->setFname($this->param['fname']);
         $call->setLname($this->param['lname']);
         $call->setPrefix1Id($this->param['prefix1_id']);
