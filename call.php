@@ -16,9 +16,11 @@ $prefix2 = $queEM->getRepository('Main\Entity\Que\SoundPrefix2')->find($call->ge
 /** @var Main\Entity\Que\SoundPrefix3 $prefix3 */
 $prefix3 = $queEM->getRepository('Main\Entity\Que\SoundPrefix3')->find($call->getPrefix3Id());
 
-$bgUrl = $spclty->getBackgroundPath();
-if(is_null($bgUrl)){
+if(is_null($spclty) || is_null($spclty->getBackgroundPath())){
     $bgUrl = $setting->getBackgroundPath();
+}
+else {
+    $bgUrl = $spclty->getBackgroundPath();
 }
 
 // name sound

@@ -6,7 +6,7 @@
  * Time: 10:22 PM
  */
 
-$splctyList = isset($_GET['spclty'])? explode(",", $_GET['spclty']): false;
+$splctyList = isset($_GET['spclty']) && !empty($_GET['spclty'])? explode(",", $_GET['spclty']): false;
 
 $queEM = \Main\DB::queEM();
 
@@ -43,35 +43,6 @@ $pfxs3 = $q->getResult();
     }
 
 </style>
-<script type="text/javascript">
-var ajaxBackEnd = {};
-    ajaxBackEnd.call = function(item, callback){
-        var that = this;
-        e.preventDefault();
-
-        var send = {
-            spclty: item.spclty,
-            fname: item.fname,
-            lname: item.lname,
-            prefix1_id: $('#prefix1_path').val(),
-            prefix2_id: $('#prefix2_path').val(),
-            prefix3_id: $('#prefix3_path').val()
-        };
-        $(that).prop("disabled", true);
-        $.post("api.php?ctl=CallCTL&method=call", send, function(data){
-            callback(data);
-
-            $( that ).prop("disabled", false);
-
-            // trigger scan form
-            if($('.scan-hn').text() == item.hn){
-                $('.scan-call-btn').prop('disabled', false);
-            }
-
-            console.log(data);
-        }, 'json');
-    };
-</script>
 <div class="panel panel-primary">
     <div class="panel-heading">
         <h3 class="panel-title"><span class="glyphicon glyphicon-volume-down" aria-hidden="true"></span> Sound Setting</h3>
@@ -175,8 +146,8 @@ $(function(){
         <div style="padding-top: 10px;">
             <span class="label label-primary">F9 : Focus</span>
             <span class="label label-info">F6 : Call</span>
-            <span class="label label-warning">F7 : Hide</span>
-            <span class="label label-danger">F8 : Skip</span>
+<!--            <span class="label label-warning">F7 : Hide</span>-->
+<!--            <span class="label label-danger">F8 : Skip</span>-->
         </div>
     </form>
 </div>
@@ -192,54 +163,86 @@ $(function(){
         <hr>
         <div>
             <button class="btn scan-call-btn btn-info">Call</button>
-            <button class="btn scan-hide-btn btn-warning">Hide</button>
-            <button class="btn scan-skip-btn btn-danger">Skip</button>
+<!--            <button class="btn scan-hide-btn btn-warning">Hide</button>-->
+<!--            <button class="btn scan-skip-btn btn-danger">Skip</button>-->
         </div>
     </div>
 </div>
 <script type="text/javascript">
 $(function(){
-    var trScan;
-    $('.scan-call-btn').click(function(e){
-        $(this).prop('disabled', true);
-        if(!$('.call-btn', trScan).prop('disabled')){
-            $('.call-btn', trScan).click();
-        }
-    });
-    $('.scan-hide-btn').click(function(e){
-        $(this).prop('disabled', true);
-        if(!$('.hide-btn', trScan).prop('disabled')){
-            $('.hide-btn', trScan).click();
-        }
-    });
-    $('.scan-skip-btn').click(function(e){
-        $(this).prop('disabled', true);
-        if(!$('.skip-btn', trScan).prop('disabled')){
-            $('.skip-btn', trScan).click();
-        }
-    });
+//    $('.scan-hide-btn').click(function(e){
+//        $(this).prop('disabled', true);
+//        if(!$('.hide-btn', trScan).prop('disabled')){
+//            $('.hide-btn', trScan).click();
+//        }
+//    });
+//    $('.scan-skip-btn').click(function(e){
+//        $(this).prop('disabled', true);
+//        if(!$('.skip-btn', trScan).prop('disabled')){
+//            $('.skip-btn', trScan).click();
+//        }
+//    });
 
     var block = $('.scan-user-block');
     var input = $('.input-scan');
+    var form = $('.scan-form');
+    var callBtn = $('.scan-call-btn');
 
-    $('.scan-form').submit(function(e){
+    var searchItem;
+    var setting;
+
+    form.submit(function(e){
         e.preventDefault();
-        $.post('api.php?ctl=QueCTL&method=searchByHn', {}, function(data){
+
+        $('input, button', form).prop('disabled', true);
+
+        $.post('api.php?ctl=QueCTL&method=searchByHn', { hn: input.val() }, function(data){
+            $('input, button', form).prop('disabled', false);
+
+            console.log(data);
+
+            if(typeof data.error != 'undefined'){
+                alert(data.message);
+                return;
+            }
+
+            input.val('');
+            block.show();
+            searchItem = data.item;
+            setting = data.setting;
+
+            $('.scan-hn').text(searchItem.hn);
+            $('.scan-fname').text(searchItem.fname);
+            $('.scan-lname').text(searchItem.lname);
+
+            if(setting.call_after_scan){
+                callBtn.click();
+            }
+
 
         }, 'json');
 
-        trScan = $('.queTr[hn="'+input.val()+'"]').first();
+//        var item = trScan.data('entity');
+    });
 
-        var item = trScan.data('entity');
-        $('.scan-hn').text(item.hn);
-        $('.scan-fname').text(item.fname);
-        $('.scan-lname').text(item.lname);
+    callBtn.click(function(e){
+        $(that).prop('disabled', true);
+        var that = this;
+        e.preventDefault();
 
-        $('.scan-hide-btn').text(item.is_hide? "show": "hide");
-
-        block.show();
-
-        input.val('');
+        var send = {
+//            spclty: item.spclty,
+            fname: searchItem.fname,
+            lname: searchItem.lname,
+            prefix1_id: $('#prefix1_path').val(),
+            prefix2_id: $('#prefix2_path').val(),
+            prefix3_id: $('#prefix3_path').val()
+        };
+        $( that ).prop("disabled", true);
+        $.post("api.php?ctl=CallCTL&method=call", send, function(data){
+            $( that ).prop("disabled", false);
+            console.log(data);
+        }, 'json');
     });
 });
 </script>
@@ -444,7 +447,25 @@ $(function(){
 
                 if(pubName=="add"){
                     if(!isSpcltyAllow(data.spclty)) return;
-                    $('.show-queue-list').append(createRow(data));
+
+                    var table = $('.show-queue-list');
+                    if($('.queTr:first', table).attr('vsttime') > data.vsttime){
+                        table.prepend(tr);
+                    }
+                    else if($('.queTr:last', table).attr('vsttime') < data.vsttime){
+                        table.append(tr);
+                    }
+                    else if($('.queTr', table).size() > 0) {
+                        $('.queTr', table).each(function(idex, item){
+                            if($(item).attr('vsttime') < data.vsttime && $(item).next().attr('vsttime') > data.vsttime){
+                                $(item).after(tr);
+                                return false;
+                            }
+                        });
+                    }
+                    else {
+                        table.append(tr);
+                    }
                 }
                 else if(pubName=="skip"){
                     if(!isSpcltyAllow(data.spclty)) return;

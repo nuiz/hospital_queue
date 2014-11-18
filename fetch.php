@@ -2,14 +2,14 @@
 /**
  * Created by PhpStorm.
  * User: p2
- * Date: 13/11/2557
- * Time: 14:12 น.
+ * Date: 18/11/2557
+ * Time: 10:24 น.
  */
 
 require_once 'bootstrap.php';
 
 while(
 \Main\Helper\GeneralHelper::curl_post(\Main\Helper\GeneralHelper::host_url()."/api.php?".http_build_query(array(
-    "ctl"=> "SyncCTL",
-    "method"=> "que"
+    "ctl"=> "QueCTL",
+    "method"=> "hideBySetting"
 ))) == 0);

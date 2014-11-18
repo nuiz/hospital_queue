@@ -25,6 +25,9 @@ class Que extends BaseEntity {
     /** @Column(type="time") */
     protected $vsttime;
 
+    /** @Column(type="integer") */
+    protected $vstts;
+
     /** @Column(type="string", length=2, options={"fixed" = true}) */
     protected $spclty;
 
@@ -183,6 +186,22 @@ class Que extends BaseEntity {
     public function getLname()
     {
         return $this->lname;
+    }
+
+    /**
+     * @param mixed $vstts
+     */
+    public function setVstts($vstts)
+    {
+        $this->vstts = $vstts;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getVstts()
+    {
+        return $this->vstts;
     }
 
 

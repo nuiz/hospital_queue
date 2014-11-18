@@ -17,16 +17,16 @@ class Setting extends BaseEntity {
     protected $background_path;
 
     /** @Column(type="boolean") */
-    protected $show_people_name;
+    protected $show_people_picture = true;
 
     /** @Column(type="boolean") */
-    protected $hide_after_call;
+    protected $hide_after_call = true;
 
     /** @Column(type="boolean") */
-    protected $call_after_scan;
+    protected $call_after_scan = true;
 
     /** @Column(type="integer") */
-    protected $auto_hide_time;
+    protected $auto_hide_time = 30;
 
     /**
      * @param mixed $background_path

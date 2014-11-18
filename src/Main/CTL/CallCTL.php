@@ -21,7 +21,9 @@ class CallCTL extends BaseCTL {
         $call->setPrefix1Id($this->param['prefix1_id']);
         $call->setPrefix2Id($this->param['prefix2_id']);
         $call->setPrefix3Id($this->param['prefix3_id']);
-        $call->setSpclty($this->param['spclty']);
+
+        $splcty = isset($this->param['spclty'])? $this->param['spclty']: null;
+        $call->setSpclty($splcty);
 
         $queEm->persist($call);
         $queEm->flush();

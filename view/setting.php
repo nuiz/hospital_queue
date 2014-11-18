@@ -35,10 +35,10 @@
             <div class="bs-callout bs-callout-info">
                 <h4>Other Function</h4>
                 <p>
-                    <input class="show_people_name-checkbox" type="checkbox"> &nbsp; Show People Picture
+                    <input class="show_people_picture-checkbox" type="checkbox"> &nbsp; Show People Picture
                 </p>
-                <p>
-                    <input class="hide_after_call-checkbox" type="checkbox"> &nbsp; Hide Queue Auto after call
+                <p style="display: none;">
+                    <input class="hide_after_call-checkbox" type="checkbox"> &nbsp; Hide Queue after call
                 </p>
                 <p>
                     <input class="call_after_scan-checkbox" type="checkbox"> &nbsp; Call after scan
@@ -70,7 +70,7 @@
             bgBlock.append(img);
 
             // set view from response
-            $('.show_people_name-checkbox').prop("checked", data.show_people_name);
+            $('.show_people_picture-checkbox').prop("checked", data.show_people_picture);
             $('.hide_after_call-checkbox').prop("checked", data.hide_after_call);
             $('.call_after_scan-checkbox').prop("checked", data.call_after_scan);
             $('.time-auto-hide').val(data.auto_hide_time);
@@ -85,7 +85,7 @@
             }
 
             // set data to request
-            send.append('show_people_name', $('.show_people_name-checkbox').prop("checked")? 1: 0);
+            send.append('show_people_picture', $('.show_people_picture-checkbox').prop("checked")? 1: 0);
             send.append('hide_after_call', $('.hide_after_call-checkbox').prop("checked")? 1: 0);
             send.append('call_after_scan', $('.call_after_scan-checkbox').prop("checked")? 1: 0);
             send.append('auto_hide_time', $('.time-auto-hide').val());

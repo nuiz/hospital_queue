@@ -20,7 +20,7 @@ class CallQue extends BaseEntity {
     /** @Column(type="string") */
     protected $lname;
 
-    /** @Column(type="string") */
+    /** @Column(type="string", nullable=true) */
     protected $spclty;
 
     /** @Column(type="string") */

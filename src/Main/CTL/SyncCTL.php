@@ -106,8 +106,10 @@ class SyncCTL extends BaseCTL {
             $item->setHn($value->getHn());
             $item->setSpclty($value->getSpclty());
             $item->setVn($value->getVn());
+
             $item->setVstdate($value->getVstdate());
             $item->setVsttime($value->getVsttime());
+            $item->setVstts($value->getVsttime()->getTimestamp());
 
             $item->setFname($patient->getFname());
             $item->setLname($patient->getLname());
