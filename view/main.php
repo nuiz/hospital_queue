@@ -244,6 +244,16 @@ $(function(){
             console.log(data);
         }, 'json');
     });
+
+    $(window).keydown(function(e) {
+        if (e.keyCode == 120) {
+            $(".input-scan").focus();
+            return;
+        }
+        if (e.keyCode===117) {
+            callBtn.click();
+        }
+    });
 });
 </script>
 
