@@ -71,18 +71,29 @@ class SyncCTL extends BaseCTL {
 
         $hosEM->clear();
 
-        $lastQue = $queEM->getRepository('Main\Entity\Que\Que')->findOneBy(array(), array('vstdate'=> 'DESC', 'vsttime'=> 'DESC'));
+        $lastQue = $queEM->getRepository('Main\Entity\Que\Que')->findOneBy(array(), array('vsttime'=> 'DESC'));
 
         // sync table
         $qb = $hosEM->getRepository('Main\Entity\Hos\Ovst')->createQueryBuilder("a");
         $qb->select("a")->setMaxResults($max);
 
-        if(!is_null($lastQue)){
-//            $qb->where("a.vstdate > :vstdate")->andWhere("a.vsttime > :vsttime")
-//                ->setParameter(':vstdate', /*$lastQue->getVstdate()->format("Y-m-d")*/ "2014-11-13")
-//                ->setParameter(':vsttime', /*$lastQue->getVsttime()->format("H:i:s")*/ "14:17:33");
-            $qb->where("a.vn > :vn")
-                ->setParameter(':vn', $lastQue->getVn());
+        if(is_null($lastQue)){
+            $qb->where("a.vstdate = :vstdate")
+                ->setParameter(':vstdate', date("Y-m-d"))
+                ->orderBy("a.vsttime");
+        }
+        else {
+            // if found last && last not today >> clear que
+            if(strtotime($lastQue->getVstdate()->format("Y-m-d")) < strtotime(date("Y-m-d"))){
+                $toolCTL = new ToolCTL();
+                $toolCTL->clearQue();
+            }
+
+            $qb->where("a.vstdate = :vstdate")
+                ->andWhere("a.vsttime > :vsttime")
+                ->setParameter(':vstdate', date("Y-m-d"))
+                ->setParameter(':vsttime', $lastQue->getVsttime()->format("H:i:s"))
+                ->orderBy("a.vsttime");
         }
 
         $q = $qb->getQuery();

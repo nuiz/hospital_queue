@@ -1,10 +1,13 @@
 <?php
-// key = E0B35-03804-68D73-C848B-96B12
-// http://license.olo.wtf/index.php?check=E0B35-03804-68D73-C848B-96B12
-// return 0 or 1
+$license = "E0B35-03804-68D73-C848B-96B12";
 
 require_once 'bootstrap.php';
 require_once 'src/Main/Helper/Checksum.php';
+
+if(file_get_contents("http://license.olo.wtf/index.php?check=".$license) != 1){
+    echo "License Error.";
+    exit();
+}
 
 $action = isset($_GET['action'])? $_GET['action']: 'main';
 ?>

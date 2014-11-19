@@ -34,6 +34,12 @@ class ToolCTL extends BaseCTL {
         $this->clearTable('Main\Entity\Que\CallQue');
         $this->clearTable('Main\Entity\Que\Que');
 
+        $queEM = DB::queEM();
+        $hosEM = DB::hosEM();
+
+        $queEM->clear();
+        $hosEM->clear();
+
         $json = array(
             'publish'=> array(
                 'name'=> 'clear',
