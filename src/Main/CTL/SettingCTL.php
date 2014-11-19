@@ -59,8 +59,8 @@ class SettingCTL extends BaseCTL {
         if(isset($this->param['show_people_picture'])){
             $item->setShowPeoplePicture((bool)$this->param['show_people_picture']);
         }
-        if(isset($this->param['hide_after_call'])){
-            $item->setHideAfterCall((bool)$this->param['hide_after_call']);
+        if(isset($this->param['skip_after_call'])){
+            $item->setSkipAfterCall((bool)$this->param['skip_after_call']);
         }
         if(isset($this->param['call_after_scan'])){
             $item->setCallAfterScan((bool)$this->param['call_after_scan']);

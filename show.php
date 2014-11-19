@@ -169,8 +169,10 @@ $(function(){
         $('.name', el).text(item.fname + " " + item.lname);
         $('.vsttime', el).text(vsttime);
 
+        $(el).attr("hn", item.hn);
         $(el).attr("vn", item.vn);
         $(el).attr("id", item.id);
+        $(el).attr("vsttime", item.vsttime);
 
         if(item.is_hide==true){
             $(el).hide();
@@ -178,6 +180,16 @@ $(function(){
         else {
             $(el).show();
         }
+
+        var intervalYellow = setInterval(function(){
+            var ts = Date.now()-3000;
+            ts = parseInt(ts/1000);
+            if($(el).attr('vsttime') < ts){
+                $(el).css({ background: "#FDF9EF" });
+                clearInterval(intervalYellow);
+            }
+            console.log($(el).attr('vsttime') + " < " + ts);
+        }, 1000);
 
         return el;
     }

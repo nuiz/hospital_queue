@@ -6,7 +6,7 @@
  * Time: 10:22 PM
  */
 
-$splctyList = isset($_GET['spclty']) && !empty($_GET['spclty'])? explode(",", $_GET['spclty']): false;
+$splctyList = isset($_GET['spclty']) || !empty($_GET['spclty'])? explode(",", $_GET['spclty']): false;
 
 $queEM = \Main\DB::queEM();
 
@@ -36,12 +36,11 @@ $pfxs3 = $q->getResult();
 .tab {
     display: none;
 }
-    .boxtree {
-        display: inline-block;
-        width: 220px;
-        margin-right: 20px;
-    }
-
+.boxtree {
+    display: inline-block;
+    width: 220px;
+    margin-right: 20px;
+}
 </style>
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -101,15 +100,15 @@ HTML;
             foreach($spcltys as $key=> $item){
                 $number = $item->getSpclty();
                 $name = $item->getName();
-                $checked = !$splctyList || in_array($item->getSpclty(), $splctyList)? "checked": "";
-                $color = !$splctyList || in_array($item->getSpclty(), $splctyList)? "color: #3498DB;": "color: #6C7A89";
+                $checked = $splctyList && in_array($item->getSpclty(), $splctyList)? "checked": "";
+                $color = $splctyList && in_array($item->getSpclty(), $splctyList)? "color: #3498DB;": "color: #6C7A89";
                 echo <<<HTML
     <label style="display: inline-block; width: 200px; {$color}" ><input class="spclty-checkbox" type="checkbox" value="{$number}" {$checked}> {$name} </label>
 HTML;
             } ?>
             <input type="hidden" name="spclty" value="<?php echo implode(',', (array)$splctyList);?>">
             <hr>
-            <button class="spclty-select-all btn btn-info" type="button">Select all</button> <button class="btn btn-primary" type="submit">Display select</button>
+            <button class="spclty-select-all btn btn-info" type="button">Select all</button> <button class="spclty-unselect-all btn btn-info" type="button">Unselect all</button> <button class="btn btn-primary" type="submit">Display select</button>
 
         </form>
     </div>
@@ -130,6 +129,13 @@ $(function(){
     $('.spclty-select-all').click(function(e){
         e.preventDefault();
         $('.spclty-checkbox').prop('checked', true);
+        $('.spclty-checkbox').change();
+    });
+
+    $('.spclty-unselect-all').click(function(e){
+        e.preventDefault();
+        $('.spclty-checkbox').prop('checked', false);
+        $('.spclty-checkbox').change();
     });
 });
 </script>
@@ -326,7 +332,7 @@ $(function(){
     var spcltyList = <?php echo json_encode($splctyList);?>;
     function isSpcltyAllow(spclty){
         if(!spcltyList)
-            return true;
+            return false;
         if(jQuery.inArray( spclty, spcltyList ) != -1)
             return true;
 
@@ -359,6 +365,15 @@ $(function(){
         $(el).attr("vn", item.vn);
         $(el).attr("id", item.id);
         $(el).attr("vsttime", item.vsttime);
+
+        var intervalYellow = setInterval(function(){
+            var ts = Date.now()-3000;
+            ts = parseInt(ts/1000);
+            if($(el).attr('vsttime') < ts){
+                $(el).css({ background: "#FDF9EF" });
+                clearInterval(intervalYellow);
+            }
+        }, 1000);
 
         $('.skip-btn', el).click(function(e){
             var that = this;
@@ -418,10 +433,6 @@ $(function(){
 
         return el;
     };
-
-    function append(){
-
-    }
 
     var conn;
     function skConnect(){

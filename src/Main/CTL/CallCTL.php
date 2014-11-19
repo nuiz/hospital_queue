@@ -13,7 +13,7 @@ use Main\DB;
 
 class CallCTL extends BaseCTL {
     public function call(){
-        $queEm = DB::queEM();
+        $queEM = DB::queEM();
 
         $call = new \Main\Entity\Que\CallQue();
         $call->setHn($this->param['hn']);
@@ -23,11 +23,11 @@ class CallCTL extends BaseCTL {
         $call->setPrefix2Id($this->param['prefix2_id']);
         $call->setPrefix3Id($this->param['prefix3_id']);
 
-        $splcty = isset($this->param['spclty'])? $this->param['spclty']: null;
-        $call->setSpclty($splcty);
+        $spclty = isset($this->param['spclty'])? $this->param['spclty']: null;
+        $call->setSpclty($spclty);
 
-        $queEm->persist($call);
-        $queEm->flush();
+        $queEM->persist($call);
+        $queEM->flush();
 
         $wsClient = new \Main\Socket\Client\WsClient("localhost", 8081);
 
@@ -41,6 +41,39 @@ class CallCTL extends BaseCTL {
         $wsClient->sendData(json_encode($json));
         unset($wsClient);
         unset($patient);
+
+        $settingCTL = new SettingCTL();
+        $setting = $settingCTL->get();
+        if($setting->getSkipAfterCall()){
+            $condition = array("hn"=> $this->param["hn"]);
+            if(!is_null($spclty)){
+                $condition['spclty'] = $spclty;
+            }
+
+            /** @var \Main\Entity\Que\Que $item */
+            $item = $queEM->getRepository('Main\Entity\Que\Que')->findOneBy($condition);
+
+            if(!is_null($item)){
+                $item->setIsSkip(true);
+                $queEM->merge($item);
+                $queEM->flush();
+
+                $wsClient = new \Main\Socket\Client\WsClient("localhost", 8081);
+
+                $json = array(
+                    'publish'=> array(
+                        'name'=> 'skip',
+                        'data'=> $item
+                    )
+                );
+                $wsClient->sendData(json_encode($json));
+                unset($wsClient);
+
+                return $json;
+            }
+        }
+        unset($settingCTL);
+        unset($setting);
 
         return $call;
     }

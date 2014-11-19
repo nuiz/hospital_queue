@@ -67,7 +67,7 @@ class SyncCTL extends BaseCTL {
         $queEM = DB::queEM();
         $hosEM = DB::hosEM();
 
-        $max = isset($this->param['max'])? $this->param['max']: 30;
+        $max = isset($this->param['max'])? $this->param['max']: 10;
 
         $hosEM->clear();
 

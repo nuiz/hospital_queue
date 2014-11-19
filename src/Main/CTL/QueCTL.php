@@ -21,6 +21,8 @@ class QueCTL extends BaseCTL {
 
     public function gets(){
         $queEM = DB::queEM();
+        $queEM->clear();
+
         $qb = $queEM->getRepository('Main\Entity\Que\Que')->createQueryBuilder("a");
         $qb->where("a.is_skip = 0")->orderBy('a.vstts');
         $items = $qb->getQuery()->getResult();
@@ -38,7 +40,7 @@ class QueCTL extends BaseCTL {
 
         if(!is_null($item)){
             $item->setIsSkip(true);
-            $queEM->persist($item);
+            $queEM->merge($item);
             $queEM->flush();
 
             $wsClient = new \Main\Socket\Client\WsClient("localhost", 8081);
@@ -107,6 +109,7 @@ class QueCTL extends BaseCTL {
         $qb->where("a.is_hide = 0")->andWhere("a.vstts < :vstts")->orderBy('a.vstts');
         $qb->setParameter('vstts', time() - ($setting->getAutoHideTime()*60));
 
+        $res = 0;
         $items = $qb->getQuery()->getResult();
         foreach($items as $key=> $item){
             $item->setIsHide(true);
@@ -123,8 +126,10 @@ class QueCTL extends BaseCTL {
             );
             $wsClient->sendData(json_encode($json));
             unset($wsClient);
+
+            $res++;
         }
 
-        return $items;
+        return $res;
     }
 }

@@ -20,7 +20,7 @@ class Setting extends BaseEntity {
     protected $show_people_picture = true;
 
     /** @Column(type="boolean") */
-    protected $hide_after_call = true;
+    protected $skip_after_call = true;
 
     /** @Column(type="boolean") */
     protected $call_after_scan = true;
@@ -93,19 +93,19 @@ class Setting extends BaseEntity {
     }
 
     /**
-     * @param mixed $hide_after_call
+     * @param mixed $skip_after_call
      */
-    public function setHideAfterCall($hide_after_call)
+    public function setSkipAfterCall($skip_after_call)
     {
-        $this->hide_after_call = $hide_after_call;
+        $this->skip_after_call = $skip_after_call;
     }
 
     /**
      * @return mixed
      */
-    public function getHideAfterCall()
+    public function getSkipAfterCall()
     {
-        return $this->hide_after_call;
+        return $this->skip_after_call;
     }
 
 
