@@ -4,10 +4,6 @@ $license = "E0B35-03804-68D73-C848B-96B12";
 require_once 'bootstrap.php';
 require_once 'src/Main/Helper/Checksum.php';
 
-if(file_get_contents("http://license.olo.wtf/index.php?check=".$license) != 1){
-    echo "License Error.";
-    exit();
-}
 
 $action = isset($_GET['action'])? $_GET['action']: 'main';
 ?>
@@ -40,7 +36,6 @@ $action = isset($_GET['action'])? $_GET['action']: 'main';
     <script src="bootflat/js/jquery.fs.stepper.min.js"></script>
 </head>
 <body style="background: #f1f1f1;">
-
 <!-- Fixed navbar -->
 <div class="navbar navbar-default" role="navigation">
     <div class="container">
@@ -70,6 +65,14 @@ $action = isset($_GET['action'])? $_GET['action']: 'main';
     </div>
 </div>
 <div class="container">
+<?php
+if(file_get_contents("http://license.olo.wtf/index.php?check=".$license) != 1){
+    echo <<<HTML
+                <span class="label label-danger">license not valid</span>
+HTML;
+    exit();
+}
+?>
 <?php
 include("view/".$action.".php");
 ?>
