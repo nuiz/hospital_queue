@@ -180,7 +180,7 @@ $(function(){
 
         var vsttime = hours + ':' + minutes.substr(minutes.length-2);
 
-        $('.hn', el).text(item.hn);
+//        $('.hn', el).text(item.hn);
         $('.name', el).text(item.fname + " " + item.lname);
         $('.vsttime', el).text(vsttime);
 
@@ -233,6 +233,10 @@ $(function(){
                         if(!isSpcltyAllow(action.data[i].spclty)) continue;
                         $('.show-queue-list').append(createRow(action.data[i]));
                     }
+
+                    $('.queTr:visible').each(function(index, el){
+                        $('.hn', el).text(index + 1);
+                    });
                 }
             }
 
@@ -278,6 +282,10 @@ $(function(){
                         tr.removeClass("red-background");
                     }
                 }
+
+                $('.queTr:visible').each(function(index, el){
+                    $('.hn', el).text(index + 1);
+                });
             }
         };
 
