@@ -159,4 +159,35 @@ class QueCTL extends BaseCTL {
 
         return $res;
     }
+
+    public function syncDrug(){
+        $queEM = DB::queEM();
+        $hosEM = DB::hosEM();
+
+        /** @var \Main\Entity\Que\Que $item */
+        $item = $queEM->getRepository('Main\Entity\Que\Que')->find($this->param['id']);
+
+        if(!is_null($item)){
+            $qb = $hosEM->getRepository('Main\Entity\Hos\Opitemrece')->createQueryBuilder('a');
+            $qb->select("COUNT(a)")->where("a.hn = :hn")->setParameter(':hn', $item->getHn());
+            $count = $qb->getQuery()->getSingleScalarResult();
+            $item->setDrug((int)$count);
+
+            $queEM->merge($item);
+            $queEM->flush();
+
+            $wsClient = new \Main\Socket\Client\WsClient("localhost", 8081);
+
+            $json = array(
+                'publish'=> array(
+                    'name'=> 'drug',
+                    'data'=> $item
+                )
+            );
+            $wsClient->sendData(json_encode($json));
+            unset($wsClient);
+        }
+
+        return $item;
+    }
 }

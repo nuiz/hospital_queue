@@ -343,6 +343,7 @@ $(function(){
             <button class="btn call-btn btn-info">Call</button>
             <button class="btn hide-btn btn-warning">Hide</button>
             <button class="btn skip-btn btn-danger">Skip</button>
+            <button class="btn drug-btn btn-info">สั่งยา</button>
         </td>
     </tr>
 </script>
@@ -461,6 +462,16 @@ $(function(){
                 send.is_hide = 0;
             }
             $.post("api.php?ctl=QueCTL&method=hide", send, function(data){
+                $( that ).prop("disabled", false);
+                console.log(data);
+            }, 'json');
+        });
+
+        $('.drug-btn', el).click(function(e){
+            e.preventDefault();
+            var that = this;
+            $( that ).prop("disabled", true);
+            $.post("api.php?ctl=QueCTL&method=syncDrug", { id: item.id }, function(data){
                 $( that ).prop("disabled", false);
                 console.log(data);
             }, 'json');

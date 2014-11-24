@@ -40,6 +40,9 @@ class Que extends BaseEntity {
     /** @Column(type="string") */
     protected $note = "";
 
+    /** @Column(type="integer", nullable=true) */
+    protected $drug = null;
+
 
     /** @Column(type="boolean") */
     protected $is_hide = false;
@@ -221,6 +224,22 @@ class Que extends BaseEntity {
     public function getNote()
     {
         return $this->note;
+    }
+
+    /**
+     * @param mixed $drug
+     */
+    public function setDrug($drug)
+    {
+        $this->drug = $drug;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDrug()
+    {
+        return $this->drug;
     }
 
 

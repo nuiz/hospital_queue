@@ -99,7 +99,7 @@ $spcltys = $q->getResult();
             <div class="name"></div>
             <small class="note-input"></small>
         </div>
-        <div class="col-md-2 col-sm-2 col-xs-2 vsttime"></div>
+        <div class="col-md-2 col-sm-2 col-xs-2 drug"></div>
     </div>
 </script>
 <script type="text/javascript">
@@ -188,11 +188,15 @@ $(function(){
         if(item.note.length > 0){
             el.addClass("red-background");
         }
+        if(item.drug != null){
+            $('.drug', el).text(item.drug);
+        }
 
         $(el).attr("hn", item.hn);
         $(el).attr("vn", item.vn);
         $(el).attr("id", item.id);
         $(el).attr("vsttime", item.vsttime);
+
 
         if(item.is_hide==true){
             $(el).hide();
@@ -282,6 +286,10 @@ $(function(){
                         tr.removeClass("red-background");
                     }
                 }
+                else if(pubName=="drug"){
+                    var tr = $('.queTr[id="'+data.id+'"]');
+                    $('.drug', tr).text(data.drug);
+                }
 
                 $('.queTr:visible').each(function(index, el){
                     $('.hn', el).text(index + 1);
@@ -300,7 +308,7 @@ $(function(){
 
         conn.onopen = function(){
             $('.show-queue-list tr').remove();
-            conn.send(JSON.stringify({ action: {name: 'QueCTL/gets'}, subscribe: ["add", "skip", "call", "hide", "clear", "editNote"] }));
+            conn.send(JSON.stringify({ action: {name: 'QueCTL/gets'}, subscribe: ["add", "skip", "call", "hide", "clear", "editNote", "drug"] }));
         }
     };
 
