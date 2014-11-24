@@ -110,6 +110,8 @@ $(function(){
             return true;
         if(jQuery.inArray( spclty, spcltyList ) != -1)
             return true;
+        if(spclty==null)
+            return true;
 
         return false;
     }
