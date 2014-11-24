@@ -32,7 +32,7 @@ class Spclty extends BaseEntity {
     protected $shortname;
 
     /** @Column(type="string", nullable=true) */
-    protected $background_path;
+    protected $background_path = null;
 
     /**
      * @param mixed $depcode

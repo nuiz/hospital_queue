@@ -20,36 +20,49 @@ class SyncCTL extends BaseCTL {
         $hosEM = DB::hosEM();
 
         // truncate table
-        $cmd = $queEM->getClassMetadata('Main\Entity\Hos\Spclty');
-        $connection = $queEM->getConnection();
-        $dbPlatform = $connection->getDatabasePlatform();
-        $connection->beginTransaction();
-
-        try {
-            $connection->query('SET FOREIGN_KEY_CHECKS=0');
-            $q = $dbPlatform->getTruncateTableSql($cmd->getTableName());
-            $connection->executeUpdate($q);
-            $connection->query('SET FOREIGN_KEY_CHECKS=1');
-            $connection->commit();
-        }
-        catch (\Exception $e) {
-            $connection->rollback();
-        }
+//        $cmd = $queEM->getClassMetadata('Main\Entity\Hos\Spclty');
+//        $connection = $queEM->getConnection();
+//        $dbPlatform = $connection->getDatabasePlatform();
+//        $connection->beginTransaction();
+//
+//        try {
+//            $connection->query('SET FOREIGN_KEY_CHECKS=0');
+//            $q = $dbPlatform->getTruncateTableSql($cmd->getTableName());
+//            $connection->executeUpdate($q);
+//            $connection->query('SET FOREIGN_KEY_CHECKS=1');
+//            $connection->commit();
+//        }
+//        catch (\Exception $e) {
+//            $connection->rollback();
+//        }
 
         // sync table
+        /** @var \Main\Entity\Hos\Spclty[] $items */
         $items = $hosEM->getRepository('Main\Entity\Hos\Spclty')->findAll();
 
         $queEM->beginTransaction();
         foreach($items as $key=> $value){
-            /** @var \Main\Entity\Hos\Spclty $value */
-            $item = new Spclty();
-            $item->setName($value->getName());
-            $item->setDepcode($value->getDepcode());
-            $item->setShortname($value->getShortname());
-            $item->setSpclty($value->getSpclty());
-            $item->setSpname($value->getSpname());
+            $item = $queEM->getRepository('Main\Entity\Que\Spclty')->find($value->getSpclty());
 
-            $queEM->persist($item);
+            if(is_null($item)){
+                $item = new Spclty();
+                $item->setName($value->getName());
+                $item->setDepcode($value->getDepcode());
+                $item->setShortname($value->getShortname());
+                $item->setSpclty($value->getSpclty());
+                $item->setSpname($value->getSpname());
+
+                $queEM->persist($item);
+            }
+            else {
+                $item->setName($value->getName());
+                $item->setDepcode($value->getDepcode());
+                $item->setShortname($value->getShortname());
+                $item->setSpclty($value->getSpclty());
+                $item->setSpname($value->getSpname());
+
+                $queEM->merge($item);
+            }
         }
 
         // flush
@@ -167,6 +180,27 @@ class SyncCTL extends BaseCTL {
             $wsClient->sendData($json);
             unset($wsClient);
             unset($patient);
+
+            // sync drug
+
+            $qb = $hosEM->getRepository('Main\Entity\Hos\Opitemrece')->createQueryBuilder('a');
+            $qb->select("COUNT(a)")->where("a.hn = :hn")->setParameter(':hn', $item->getHn());
+            $count = $qb->getQuery()->getSingleScalarResult();
+            $item->setDrug((int)$count);
+
+            $queEM->merge($item);
+            $queEM->flush();
+
+            $wsClient = new \Main\Socket\Client\WsClient("localhost", 8081);
+
+            $json = array(
+                'publish'=> array(
+                    'name'=> 'drug',
+                    'data'=> $item
+                )
+            );
+            $wsClient->sendData(json_encode($json));
+            unset($wsClient);
 
             $res++;
         }

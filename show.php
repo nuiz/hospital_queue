@@ -72,6 +72,13 @@ $spcltys = $q->getResult();
     .note-input {
         color: #999999;
     }
+    .midHeader {
+
+    }
+    .midHeader2 {
+        display:inline-block;
+        font-size:24px;
+    }
 </style>
 <div class="dep-ctx">
     <div class="box">
@@ -88,18 +95,23 @@ $spcltys = $q->getResult();
             </div>
         </div>
     </div>
+    <div class="midHeader">
+        <div class="midHeader2" style="padding-right:20px;">ลำดับ</div>
+        <div class="midHeader2" style="padding-left:30px;">ชื่อ</div>
+        <div class="midHeader2" style="padding-left:100px;">ปริมาณงาน/ยา</div>
+    </div>
     <div class="show-queue-list">
 
     </div>
 </div>
 <script type="text/template" id="que-template">
     <div class="row queTr que">
-        <div class="col-md-4 col-sm-4 col-xs-4 hn"></div>
-        <div class="col-md-6 col-sm-6 col-xs-6">
+        <div class="col-md-1 col-sm-1 col-xs-1 hn" style="font-size:30px;"></div>
+        <div class="col-md-10 col-sm-10 col-xs-8" style="font-size:30px;">
             <div class="name"></div>
             <small class="note-input"></small>
         </div>
-        <div class="col-md-2 col-sm-2 col-xs-2 drug"></div>
+        <div class="col-md-2 col-sm-2 col-xs-2 drug" style="font-size:30px;"></div>
     </div>
 </script>
 <script type="text/javascript">
@@ -118,7 +130,7 @@ $(function(){
 
     function date() {
         var now = new Date(),
-        now = now.getHours()+':'+now.getMinutes()+':'+now.getSeconds();
+            now = now.getHours()+':'+now.getMinutes()+':'+now.getSeconds();
         $('#time').html(now);
     }
     date();
