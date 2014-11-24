@@ -26,13 +26,10 @@ class Opitemrece extends BaseEntity {
     protected $hn;
 
     /** @Column(type="date") */
-    protected $vstdate;
+    protected $rxdate;
 
     /** @Column(type="time") */
-    protected $vsttime;
-
-    /** @Column(type="string", length=2, options={"fixed" = true}) */
-    protected $spclty;
+    protected $rxtime;
 
     /**
      * @param mixed $hn
@@ -67,19 +64,35 @@ class Opitemrece extends BaseEntity {
     }
 
     /**
-     * @param mixed $spclty
+     * @param mixed $rxdate
      */
-    public function setSpclty($spclty)
+    public function setRxdate($rxdate)
     {
-        $this->spclty = $spclty;
+        $this->rxdate = $rxdate;
     }
 
     /**
      * @return mixed
      */
-    public function getSpclty()
+    public function getRxdate()
     {
-        return $this->spclty;
+        return $this->rxdate;
+    }
+
+    /**
+     * @param mixed $rxtime
+     */
+    public function setRxtime($rxtime)
+    {
+        $this->rxtime = $rxtime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRxtime()
+    {
+        return $this->rxtime;
     }
 
     /**
@@ -97,38 +110,4 @@ class Opitemrece extends BaseEntity {
     {
         return $this->vn;
     }
-
-    /**
-     * @param mixed $vstdate
-     */
-    public function setVstdate($vstdate)
-    {
-        $this->vstdate = $vstdate;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getVstdate()
-    {
-        return $this->vstdate;
-    }
-
-    /**
-     * @param mixed $vsttime
-     */
-    public function setVsttime($vsttime)
-    {
-        $this->vsttime = $vsttime;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getVsttime()
-    {
-        return $this->vsttime;
-    }
-
-
 }

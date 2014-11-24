@@ -73,7 +73,7 @@ $spcltys = $q->getResult();
         color: #999999;
     }
     .midHeader {
-
+border-bottom: 4px solid #8CC152;
     }
     .midHeader2 {
         display:inline-block;
@@ -97,7 +97,7 @@ $spcltys = $q->getResult();
     </div>
     <div class="midHeader">
         <div class="midHeader2" style="padding-right:20px;">ลำดับ</div>
-        <div class="midHeader2" style="padding-left:30px;">ชื่อ</div>
+        <div class="midHeader2" style="padding-left:26px;">ชื่อ</div>
         <div class="midHeader2" style="padding-left:100px;">ปริมาณงาน/ยา</div>
     </div>
     <div class="show-queue-list">
@@ -106,7 +106,7 @@ $spcltys = $q->getResult();
 </div>
 <script type="text/template" id="que-template">
     <div class="row queTr que">
-        <div class="col-md-1 col-sm-1 col-xs-1 hn" style="font-size:30px;"></div>
+        <div class="col-md-2 col-sm-2 col-xs-2 hn" style="font-size:30px;"></div>
         <div class="col-md-10 col-sm-10 col-xs-8" style="font-size:30px;">
             <div class="name"></div>
             <small class="note-input"></small>
@@ -302,7 +302,17 @@ $(function(){
                 }
                 else if(pubName=="drug"){
                     var tr = $('.queTr[id="'+data.id+'"]');
-                    $('.drug', tr).text(data.drug);
+
+                    if(isSpcltyAllow("21")){
+                        if(tr.size() == 0){
+                            tr = createRow(data);
+                            $('.show-queue-list').append(tr)
+                        }
+                        $('.drug', tr).text(data.drug);;
+                    }
+                    else {
+                        tr.remove();
+                    }
                 }
 
                 $('.queTr:visible').each(function(index, el){

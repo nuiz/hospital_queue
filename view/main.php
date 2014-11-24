@@ -601,6 +601,43 @@ $(function(){
                         tr.removeClass("red-background");
                     }
                 }
+                else if(pubName=="drug"){
+                    var tr = $('.queTr[id="'+data.id+'"]');
+                    if(isSpcltyAllow("21")){
+                        if(tr.size() == 0){
+                            var table;
+                            if(data.is_hide==true){
+                                table = $('.hide-queue-list');
+                            }
+                            else {
+                                table = $('.show-queue-list');
+                            }
+
+                            if($('.queTr:first', table).attr('vsttime') > data.vsttime){
+                                table.prepend(tr);
+                            }
+                            else if($('.queTr:last', table).attr('vsttime') < data.vsttime){
+                                table.append(tr);
+                            }
+                            else if($('.queTr', table).size() > 0) {
+                                $('.queTr', table).each(function(idex, item){
+                                    if($(item).attr('vsttime') < data.vsttime && $(item).next().attr('vsttime') > data.vsttime){
+                                        $(item).after(tr);
+                                        return false;
+                                    }
+                                });
+                            }
+                            else {
+                                table.append(tr);
+                            }
+
+                            tr.data('entity', data);
+                        }
+                    }
+                    else {
+                        tr.remove();
+                    }
+                }
             }
         };
 
