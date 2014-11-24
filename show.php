@@ -59,11 +59,23 @@ $spcltys = $q->getResult();
         border-bottom-width: 3px;
         border-bottom-style: solid;
     }
-
+    .queTr {
+        padding: 10px 10px;
+        border-bottom: 1px solid gray;
+    }
+    .yellow-background {
+        background: #FDF9EF;
+    }
+    .red-background {
+        background: #FFD2D3 !important;
+    }
+    .note-input {
+        color: #999999;
+    }
 </style>
-<div class="row-fluid dep-ctx">
-    <div class="span12 box">
-        <div class="box-header red-background" style="font-size: 26px;
+<div class="dep-ctx">
+    <div class="box">
+        <div class="box-header" style="font-size: 26px;
     font-weight: 200;
     line-height: 30px;
     padding: 10px 15px;
@@ -76,16 +88,19 @@ $spcltys = $q->getResult();
             </div>
         </div>
     </div>
-    <table class="table show-queue-list">
+    <div class="show-queue-list">
 
-    </table>
+    </div>
 </div>
 <script type="text/template" id="que-template">
-    <tr class="queTr que">
-        <td class="col-md-4 hn"></td>
-        <td class="col-md-6 name"></td>
-        <td class="col-md-2 vsttime"></td>
-    </tr>
+    <div class="row queTr que">
+        <div class="col-md-4 col-sm-4 col-xs-4 hn"></div>
+        <div class="col-md-6 col-sm-6 col-xs-6">
+            <div class="name"></div>
+            <small class="note-input"></small>
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-2 vsttime"></div>
+    </div>
 </script>
 <script type="text/javascript">
 $(function(){
@@ -169,6 +184,11 @@ $(function(){
         $('.name', el).text(item.fname + " " + item.lname);
         $('.vsttime', el).text(vsttime);
 
+        $('.note-input', el).text(item.note);
+        if(item.note.length > 0){
+            el.addClass("red-background");
+        }
+
         $(el).attr("hn", item.hn);
         $(el).attr("vn", item.vn);
         $(el).attr("id", item.id);
@@ -185,10 +205,9 @@ $(function(){
             var ts = Date.now()-3000;
             ts = parseInt(ts/1000);
             if($(el).attr('vsttime') < ts){
-                $(el).css({ background: "#FDF9EF" });
+                $(el).addClass("yellow-background");
                 clearInterval(intervalYellow);
             }
-            console.log($(el).attr('vsttime') + " < " + ts);
         }, 1000);
 
         return el;
@@ -248,6 +267,17 @@ $(function(){
 //                    $('.show-queue-list tr').remove();
                     conn.close();
                 }
+                else if(pubName=="editNote") {
+                    var tr = $('.queTr[id="'+data.id+'"]');
+                    $('.note-input', tr).text(data.note);
+                    tr.data('entity', data);
+                    if(data.note.length > 0){
+                        tr.addClass("red-background");
+                    }
+                    else {
+                        tr.removeClass("red-background");
+                    }
+                }
             }
         };
 
@@ -262,7 +292,7 @@ $(function(){
 
         conn.onopen = function(){
             $('.show-queue-list tr').remove();
-            conn.send(JSON.stringify({ action: {name: 'QueCTL/gets'}, subscribe: ["add", "skip", "call", "hide", "clear"] }));
+            conn.send(JSON.stringify({ action: {name: 'QueCTL/gets'}, subscribe: ["add", "skip", "call", "hide", "clear", "editNote"] }));
         }
     };
 

@@ -45,7 +45,7 @@ $pfxs3 = $q->getResult();
     background: #FDF9EF;
 }
 .red-background {
-    background: #e74c3c !important;
+    background: #FFD2D3  !important;
 }
 </style>
 <div class="panel panel-primary">
