@@ -85,6 +85,33 @@ class QueCTL extends BaseCTL {
         return $item;
     }
 
+    public function editNote(){
+        $queEM = DB::queEM();
+        /** @var \Main\Entity\Que\Que $item */
+        $item = $queEM->getRepository('Main\Entity\Que\Que')->findOneBy(array(
+            'id'=> $this->param['id']
+        ));
+
+        if(!is_null($item)){
+            $item->setNote($this->param['note']);
+            $queEM->merge($item);
+            $queEM->flush();
+
+            $wsClient = new \Main\Socket\Client\WsClient("localhost", 8081);
+
+            $json = array(
+                'publish'=> array(
+                    'name'=> 'editNote',
+                    'data'=> $item
+                )
+            );
+            $wsClient->sendData(json_encode($json));
+            unset($wsClient);
+        }
+
+        return $item;
+    }
+
     public function searchByHn(){
         $hosEM = DB::hosEM();
 

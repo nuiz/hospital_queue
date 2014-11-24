@@ -37,6 +37,9 @@ class Que extends BaseEntity {
     /** @Column(type="string") */
     protected $lname;
 
+    /** @Column(type="string") */
+    protected $note = "";
+
 
     /** @Column(type="boolean") */
     protected $is_hide = false;
@@ -202,6 +205,22 @@ class Que extends BaseEntity {
     public function getVstts()
     {
         return $this->vstts;
+    }
+
+    /**
+     * @param mixed $note
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNote()
+    {
+        return $this->note;
     }
 
 

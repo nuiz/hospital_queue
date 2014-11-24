@@ -41,6 +41,12 @@ $pfxs3 = $q->getResult();
     width: 220px;
     margin-right: 20px;
 }
+.yellow-background {
+    background: #FDF9EF;
+}
+.red-background {
+    background: #e74c3c !important;
+}
 </style>
 <div class="panel panel-primary">
     <div class="panel-heading">
@@ -318,6 +324,7 @@ $(function(){
         <td class="hn"></td>
         <td class="name"></td>
         <td class="vsttime"></td>
+        <td><form class="note-form"><input type="text" class="note-input"></form></td>
         <td>
             <button class="btn call-btn btn-info">Call</button>
             <button class="btn hide-btn btn-warning">Hide</button>
@@ -361,6 +368,13 @@ $(function(){
         $('.name', el).text(item.fname + " " + item.lname);
         $('.vsttime', el).text(vsttime);
 
+        var noteInput = $('.note-input', el);
+        noteInput.val(item.note);
+
+        if(item.note.length > 0){
+            el.addClass("red-background");
+        }
+
         $(el).attr("hn", item.hn);
         $(el).attr("vn", item.vn);
         $(el).attr("id", item.id);
@@ -370,10 +384,19 @@ $(function(){
             var ts = Date.now()-3000;
             ts = parseInt(ts/1000);
             if($(el).attr('vsttime') < ts){
-                $(el).css({ background: "#FDF9EF" });
+                $(el).addClass("yellow-background");
                 clearInterval(intervalYellow);
             }
         }, 1000);
+
+        $('.note-form', el).submit(function(e){
+            e.preventDefault();
+            noteInput.prop("disabled", true);
+            $.post("api.php?ctl=QueCTL&method=editNote", {id: item.id, note: noteInput.val().trim() }, function(data){
+                noteInput.prop("disabled", false);
+                console.log(data);
+            }, 'json');
+        });
 
         $('.skip-btn', el).click(function(e){
             var that = this;
@@ -542,6 +565,17 @@ $(function(){
 //                    $('.hide-queue-list tr').remove();
                     conn.close();
                 }
+                else if(pubName=="editNote") {
+                    var tr = $('.queTr[id="'+data.id+'"]');
+                    $('.note-input', tr).val(data.note);
+                    tr.data('entity', data);
+                    if(data.note.length > 0){
+                        tr.addClass("red-background");
+                    }
+                    else {
+                        tr.removeClass("red-background");
+                    }
+                }
             }
         };
 
@@ -558,7 +592,7 @@ $(function(){
         conn.onopen = function(){
             $('.show-queue-list tr').remove();
             $('.hide-queue-list tr').remove();
-            conn.send(JSON.stringify({ action: {name: 'QueCTL/gets'}, subscribe: ["add", "skip", "hide", "clear"] }));
+            conn.send(JSON.stringify({ action: {name: 'QueCTL/gets'}, subscribe: ["add", "skip", "hide", "clear", "editNote"] }));
         }
     };
 
