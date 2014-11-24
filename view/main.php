@@ -97,10 +97,12 @@ HTML;
     </div>
 </div>
 <div class="panel panel-success">
-    <div class="panel-heading">
+    <div class="panel-heading" id="depDivBtu">
         <h3 class="panel-title"><span class="glyphicon glyphicon-th" aria-hidden="true"> </span> Department Setting</h3>
     </div>
     <div class="panel-body">
+
+<div id="depDiv" style="display:none;">
         <form class="spclty-form">
             <?php
             foreach($spcltys as $key=> $item){
@@ -117,12 +119,24 @@ HTML;
             <button class="spclty-select-all btn btn-info" type="button">Select all</button> <button class="spclty-unselect-all btn btn-info" type="button">Unselect all</button> <button class="btn btn-primary" type="submit">Display select</button>
 
         </form>
+</div>
     </div>
 
 </div>
 
 <script type="text/javascript">
 $(function(){
+
+	$('#depDivBtu').click(function(){
+
+	if ($("#depDiv").css("display")== "none") {
+	
+$("#depDiv").show();
+         } else {
+$("#depDiv").hide();
+			
+	}
+});
     var form = $('.spclty-form');
     $('.spclty-checkbox').change(function(e){
         var list = [];

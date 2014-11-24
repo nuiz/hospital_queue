@@ -127,16 +127,16 @@ $lname_url = "http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".
     <div class='col-md-6'>
         <div class="box-content box-double-padding text-center">
             <div style="padding-top: 50px;">
-                <img data-src="holder.js/140x140" class="img-thumbnail hn-image" alt="140x140" src="<?php echo $hnUrl;?>" style="width: 240px; height: 240px;">
-                <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 70px; line-height: 80px;"><?php echo $call->getFName()." ".$call->getLname();?></h1>
+                <img data-src="holder.js/140x140" class="img-thumbnail hn-image" alt="140x140" src="<?php echo $hnUrl;?>" style="width: 300px; height: 300px;">
+                <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 80px; line-height: 80px;"><?php echo $call->getFName()." ".$call->getLname();?></h1>
             </div>
         </div>
     </div>
     <div class='col-md-6'>
         <div class="box-content box-double-padding text-center">
             <div style="padding-top: 50px;">
-                <img class="img-thumbnail" alt="140x140" src="<?php echo $prefix2->getPicturePath();?>" style="width: 240px; height: 240px;">
-                <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 70px; line-height: 80px;"><?php echo $prefix2->getRoomName();?></h1>
+                <img class="img-thumbnail" alt="140x140" src="<?php echo $prefix2->getPicturePath();?>" style="width: 300px; height: 300px;">
+                <h1 style="text-shadow: 4px 4px 2px rgba(150, 150, 150, 1);font-size: 80px; line-height: 80px;"><?php echo $prefix2->getRoomName();?></h1>
             </div>
         </div>
     </div>
