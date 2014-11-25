@@ -160,6 +160,81 @@ class QueCTL extends BaseCTL {
         return $res;
     }
 
+    public function fetchDrug(){
+        $last_drug = file_get_contents('cache/last_drug.txt');
+
+        $queEM = DB::queEM();
+        $hosEM = DB::hosEM();
+
+        $qb = $hosEM->getRepository('Main\Entity\Hos\Opitemrece')->createQueryBuilder("a");
+        $qb->select("a");
+
+        if($last_drug == 0){
+            $qb->where("a.rxdate = :rxdate")
+                ->setParameter(':rxdate', date("Y-m-d"))
+                ->orderBy("a.rxtime");
+        }
+        else {
+            $qb->where("a.rxdate = :rxdate")
+                ->andWhere("a.rxtime > :rxtime")
+                ->setParameter(':rxdate', date("Y-m-d"))
+                ->setParameter(':rxtime', date("H:i:s", $last_drug))
+                ->orderBy("a.rxtime");
+        }
+
+        $q = $qb->getQuery();
+
+        /** @var \Main\Entity\Hos\Opitemrece[] $items */
+        $items = $q->getResult();
+
+        $qb = $hosEM->getRepository('Main\Entity\Hos\Opitemrece')->createQueryBuilder('a');
+        $qb->select("MAX(a.rxtime)");
+        $maxRxtime = $qb->getQuery()->getSingleScalarResult();
+        $last_drug = strtotime($maxRxtime);
+
+        $res = 0;
+        $vnCount = array();
+        foreach($items as $key=> $value){
+            /** @var \Main\Entity\Que\Que $que */
+            $que = $queEM->getRepository('Main\Entity\Que\Que')->findOneBy(array(
+                'vn'=> $value->getVn()
+            ));
+
+            if(!is_null($que)){
+                if(!isset($vnCount[$que->getVn()])){
+                    $qb = $hosEM->getRepository('Main\Entity\Hos\Opitemrece')->createQueryBuilder('a');
+                    $qb->select("COUNT(a)")->where("a.vn = :vn")->setParameter(':vn', $que->getVn());
+                    $count = $qb->getQuery()->getSingleScalarResult();
+
+                    $vnCount[$que->getVn()] = $count;
+                }
+
+                $que->setDrug($vnCount[$que->getVn()]);
+                $que->setSpclty("21");
+
+                $queEM->merge($que);
+                $queEM->flush();
+
+                $wsClient = new \Main\Socket\Client\WsClient("localhost", 8081);
+
+                $json = array(
+                    'publish'=> array(
+                        'name'=> 'drug',
+                        'data'=> $que
+                    )
+                );
+
+                $wsClient->sendData(json_encode($json));
+                unset($wsClient);
+            }
+
+            $res++;
+        }
+
+        file_put_contents('cache/last_drug.txt', $last_drug);
+        return $res;
+    }
+
     public function syncDrug(){
         $queEM = DB::queEM();
         $hosEM = DB::hosEM();
@@ -169,7 +244,7 @@ class QueCTL extends BaseCTL {
 
         if(!is_null($item)){
             $qb = $hosEM->getRepository('Main\Entity\Hos\Opitemrece')->createQueryBuilder('a');
-            $qb->select("COUNT(a)")->where("a.hn = :hn")->setParameter(':hn', $item->getHn());
+            $qb->select("COUNT(a)")->where("a.vn = :vn")->setParameter(':vn', $item->getVn());
             $count = $qb->getQuery()->getSingleScalarResult();
             $item->setDrug((int)$count);
 
