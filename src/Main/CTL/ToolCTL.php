@@ -39,6 +39,7 @@ class ToolCTL extends BaseCTL {
 
         $queEM->clear();
         $hosEM->clear();
+        file_put_contents('cache/last_drug.txt', "0");
 
         $json = array(
             'publish'=> array(

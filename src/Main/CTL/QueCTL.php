@@ -161,7 +161,7 @@ class QueCTL extends BaseCTL {
     }
 
     public function fetchDrug(){
-        $last_drug = file_get_contents('cache/last_drug.txt');
+//        $last_drug = file_get_contents('cache/last_drug.txt');
 
         $queEM = DB::queEM();
         $hosEM = DB::hosEM();
@@ -169,28 +169,28 @@ class QueCTL extends BaseCTL {
         $qb = $hosEM->getRepository('Main\Entity\Hos\Opitemrece')->createQueryBuilder("a");
         $qb->select("a");
 
-        if($last_drug == 0){
+//        if($last_drug == 0){
+//            $qb->where("a.rxdate = :rxdate")
+//                ->setParameter(':rxdate', date("Y-m-d"))
+//                ->orderBy("a.rxtime");
+//        }
+//        else {
             $qb->where("a.rxdate = :rxdate")
-                ->setParameter(':rxdate', date("Y-m-d"))
-                ->orderBy("a.rxtime");
-        }
-        else {
-            $qb->where("a.rxdate = :rxdate")
-                ->andWhere("a.rxtime > :rxtime")
-                ->setParameter(':rxdate', date("Y-m-d"))
-                ->setParameter(':rxtime', date("H:i:s", $last_drug))
-                ->orderBy("a.rxtime");
-        }
+//                ->andWhere("a.rxtime > :rxtime")
+                ->setParameter(':rxdate', date("Y-m-d"));
+//                ->setParameter(':rxtime', date("H:i:s", $last_drug))
+//                ->orderBy("a.rxtime");
+//        }
 
         $q = $qb->getQuery();
 
         /** @var \Main\Entity\Hos\Opitemrece[] $items */
         $items = $q->getResult();
 
-        $qb = $hosEM->getRepository('Main\Entity\Hos\Opitemrece')->createQueryBuilder('a');
-        $qb->select("MAX(a.rxtime)");
-        $maxRxtime = $qb->getQuery()->getSingleScalarResult();
-        $last_drug = strtotime($maxRxtime);
+//        $qb = $hosEM->getRepository('Main\Entity\Hos\Opitemrece')->createQueryBuilder('a');
+//        $qb->select("MAX(a.rxtime)");
+//        $maxRxtime = $qb->getQuery()->getSingleScalarResult();
+//        $last_drug = strtotime($maxRxtime);
 
         $res = 0;
         $vnCount = array();
@@ -207,10 +207,23 @@ class QueCTL extends BaseCTL {
                     $count = $qb->getQuery()->getSingleScalarResult();
 
                     $vnCount[$que->getVn()] = $count;
+                    if($count == $que->getDrug()){
+                        continue;
+                    }
+                }
+                else {
+                    continue;
                 }
 
                 $que->setDrug($vnCount[$que->getVn()]);
                 $que->setSpclty("21");
+                $que->setIsHide(false);
+                $que->setIsSkip(false);
+
+                $now = new \DateTime();
+                $que->setVstdate($now);
+                $que->setVsttime($now);
+                $que->setVstts($now->getTimestamp());
 
                 $queEM->merge($que);
                 $queEM->flush();
@@ -231,7 +244,7 @@ class QueCTL extends BaseCTL {
             $res++;
         }
 
-        file_put_contents('cache/last_drug.txt', $last_drug);
+//        file_put_contents('cache/last_drug.txt', $last_drug);
         return $res;
     }
 
@@ -246,7 +259,16 @@ class QueCTL extends BaseCTL {
             $qb = $hosEM->getRepository('Main\Entity\Hos\Opitemrece')->createQueryBuilder('a');
             $qb->select("COUNT(a)")->where("a.vn = :vn")->setParameter(':vn', $item->getVn());
             $count = $qb->getQuery()->getSingleScalarResult();
+
+            if($count != $item->getDrug()){
+                $item->setVstdate(date('Y-m-d'));
+                $item->setVsttime(date('H:i:s'));
+                $item->setVstts(time());
+            }
             $item->setDrug((int)$count);
+            $item->setSpclty("21");
+            $item->setIsHide(false);
+            $item->setIsSkip(false);
 
             $queEM->merge($item);
             $queEM->flush();

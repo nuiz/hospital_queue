@@ -604,13 +604,17 @@ $(function(){
                 else if(pubName=="drug"){
                     var tr = $('.queTr[id="'+data.id+'"]');
                     if(isSpcltyAllow("21")){
+                        console.log(tr.size());
                         if(tr.size() == 0){
+                            tr = createRow(data);
                             var table;
                             if(data.is_hide==true){
-                                table = $('.hide-queue-list');
+                                $('.hide-btn', tr).text('show').attr("is_hide", 1);
+                                table = $('.hide-queue-list').append(tr);
                             }
                             else {
-                                table = $('.show-queue-list');
+                                $('.hide-btn', tr).text('hide').attr("is_hide", 0);
+                                table = $('.show-queue-list').append(tr);
                             }
 
                             if($('.queTr:first', table).attr('vsttime') > data.vsttime){
@@ -630,12 +634,14 @@ $(function(){
                             else {
                                 table.append(tr);
                             }
-
-                            tr.data('entity', data);
+                            console.log('add drug');
                         }
+
+                        tr.data('entity', data);
                     }
                     else {
                         tr.remove();
+                        console.log('remove drug');
                     }
                 }
             }
@@ -654,7 +660,7 @@ $(function(){
         conn.onopen = function(){
             $('.show-queue-list tr').remove();
             $('.hide-queue-list tr').remove();
-            conn.send(JSON.stringify({ action: {name: 'QueCTL/gets'}, subscribe: ["add", "skip", "hide", "clear", "editNote"] }));
+            conn.send(JSON.stringify({ action: {name: 'QueCTL/gets'}, subscribe: ["add", "skip", "hide", "clear", "editNote", "drug"] }));
         }
     };
 

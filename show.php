@@ -308,7 +308,13 @@ $(function(){
                             tr = createRow(data);
                             $('.show-queue-list').append(tr)
                         }
-                        $('.drug', tr).text(data.drug);;
+                        $('.drug', tr).text(data.drug);
+                        if(data.is_hide==true){
+                            tr.hide();
+                        }
+                        else {
+                            tr.show();
+                        }
                     }
                     else {
                         tr.remove();
@@ -326,7 +332,7 @@ $(function(){
         };
 
         conn.onclose = function(){
-            $('.show-queue-list tr').remove();
+            $('.show-queue-list div').remove();
             setTimeout(function(){ skConnect(); }, 3000);
         };
 

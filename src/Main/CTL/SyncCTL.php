@@ -113,8 +113,6 @@ class SyncCTL extends BaseCTL {
 
         $items = $q->getResult();
 
-        $queEM->beginTransaction();
-
         $res = 0;
 
         /** @var \Main\Entity\Hos\Ovst $value */
@@ -139,6 +137,7 @@ class SyncCTL extends BaseCTL {
             $item->setLname($patient->getLname());
 
             $queEM->persist($item);
+            $queEM->flush();
 
             $wsClient = new \Main\Socket\Client\WsClient("localhost", 8081);
 
@@ -180,38 +179,6 @@ class SyncCTL extends BaseCTL {
             $wsClient->sendData($json);
             unset($wsClient);
             unset($patient);
-
-            // sync drug
-
-            $qb = $hosEM->getRepository('Main\Entity\Hos\Opitemrece')->createQueryBuilder('a');
-            $qb->select("COUNT(a)")->where("a.hn = :hn")->setParameter(':hn', $item->getHn());
-            $count = $qb->getQuery()->getSingleScalarResult();
-            $item->setDrug((int)$count);
-
-            $queEM->merge($item);
-            $queEM->flush();
-
-            $wsClient = new \Main\Socket\Client\WsClient("localhost", 8081);
-
-            $json = array(
-                'publish'=> array(
-                    'name'=> 'drug',
-                    'data'=> $item
-                )
-            );
-            $wsClient->sendData(json_encode($json));
-            unset($wsClient);
-
-            $res++;
-        }
-
-        // flush
-        try {
-            $queEM->flush();
-            $queEM->commit();
-        }
-        catch(Exception $ex){
-            $queEM->rollback();
         }
 
         return $res;
