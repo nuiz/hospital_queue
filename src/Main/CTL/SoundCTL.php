@@ -14,9 +14,11 @@ use Main\Entity\Que\SoundPrefix1;
 use Main\Entity\Que\SoundPrefix2;
 use Main\Entity\Que\SoundPrefix3;
 use Main\Helper\ResponseHelper;
+use Main\Helper\CheckLang;
 use Ratchet\Wamp\Exception;
 
 class SoundCTL extends BaseCTL {
+
     public function add(){
         $queEM = DB::queEM();
         $queEM->beginTransaction();
@@ -31,7 +33,7 @@ class SoundCTL extends BaseCTL {
                 $ext = explode('.', $name);
                 $ext = array_pop($ext);
 
-                $allow = array("jpg", "jpeg", "png");
+                $allow = array("jpg", "jpeg", "png","JPG");
                 if(!in_array($ext, $allow)){
                     return array(
                         'error'=> array(
@@ -62,6 +64,11 @@ class SoundCTL extends BaseCTL {
             if(!preg_match('/[ก-๙]/i', $this->param['name'])){
                 $lang = 'en';
             }
+
+            if (CheckLang::isJapanese($this->param['name']) == 1) {
+                $lang = 'ja';
+            }
+
             $soundData = file_get_contents("http://translate.google.com/translate_tts?tl={$lang}&ie=UTF-8&q=".urlencode($this->param['name']));
             $fp = fopen($path, 'w');
             fwrite($fp, $soundData);

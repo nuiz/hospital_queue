@@ -40,7 +40,7 @@ class SettingCTL extends BaseCTL {
             $ext = explode('.', $name);
             $ext = array_pop($ext);
 
-            $allow = array("jpg", "jpeg", "png");
+            $allow = array("jpg", "jpeg", "png","JPG");
             if(!in_array($ext, $allow)){
                 return array(
                     'error'=> array(
